@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% include 'common/common_css.html' %}
+
+    <title>Search Product</title>
+
+
+<style>
+
+    .search-box{
+        width:35%;
+        margin:30px auto;
+        padding:20px;
+        box-shadow:0px 0px 10px lightgray;
+        border-radius:10px;
+        background-color:white;
+    }
+
+    .flex-container{
+        display:flex;
+        gap:30px;
+        flex-wrap:wrap;
+        justify-content:center;
+        margin:4%;
+    }
+
+    .product-card{
+        width:280px;
+        border-radius:10px;
+        box-shadow:0px 0px 10px gray;
+        overflow:hidden;
+        background-color:white;
+        transition:0.3s;
+    }
+
+    .product-card:hover{
+        transform:translateY(-5px);
+    }
+
+    .product-card img{
+        width:100%;
+        height:220px;
+        object-fit:cover;
+    }
+
+    .product-body{
+        padding:15px;
+    }
+
+    .product-name{
+        color:#0d6efd;
+        font-weight:bold;
+        font-size:20px;
+    }
+
+    .brand{
+        color:#6c757d;
+        font-size:15px;
+    }
+
+    .price{
+        color:green;
+        font-size:22px;
+        font-weight:bold;
+    }
+
+    .description{
+        color:#555;
+        text-align:justify;
+        min-height:80px;
+    }
+
+    .whatsapp-btn{
+        width:100%;
+    }
+
+</style>
+
+<div class="main-div">
+
+    <!-- Search Form -->
+
+    <div class="search-box">
+
+        <form method="post" action="#">   <!--write your own endpoint in action -->
+            {% csrf_token %}
+
+            
+                    <select name="category" class="form-select">
+                        <option value="">Select Product Category</option>
+                        <option>Electronics</option>
+                        <option>Fashion</option>
+                        <option>Books</option>
+                        <option>Sports</option>
+                    </select>
+               
+
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn btn-primary">
+                        Search
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    {% if product_key %}<!--write your own key name from view -->
+
+    <div class="flex-container">
+
+        {% for product in product_key %}
+
+        <div class="product-card">
+
+            <img src="/media/{{ product.product_pic }}" alt="Product Image">
+
+            <div class="product-body">
+
+                <div class="product-name">
+                    {{ product.product_name }}<!--write your own column names -->
+                </div>
+
+                <div class="brand">
+                    Brand : {{ product.brand }}
+                </div>
+
+                <div class="price">
+                    ₹ {{ product.price }}
+                </div>
+
+                <p class="description">
+                    {{ product.description }}
+                </p>
+
+                <a href="https://wa.me/91{{ product.phone }}"
+                   target="_blank"
+                   class="btn btn-success whatsapp-btn">
+                    Chat on WhatsApp
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <h3 class="text-center text-danger mt-5">
+        No Products Found
+    </h3>
+
+    {% endif %}
+
+</div>
+
+{% include 'common/footer.html' %}

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products & Recipes | FlavorCraft</title>
+
+    {% include 'common/common_css.html' %}
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --orange-grad: linear-gradient(135deg, #ff9f43 0%, #ff5252 100%);
+            --orange-glow: rgba(255, 159, 67, 0.4);
+            --dark-bg: #0d101d;
+            --card-glass: rgba(255, 255, 255, 0.95);
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Dynamic Background Glow Effect */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.35;
+            animation: floatGlow 12s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: #ff7924;
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            width: 550px;
+            height: 550px;
+            background: #6366f1;
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -6s;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 40px) scale(1.1); }
+        }
+
+        /* Top Tagline Header */
+        .header-tagline {
+            background: var(--orange-grad);
+            padding: 12px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px var(--orange-glow);
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-tagline h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Wrapper Layout */
+        .main-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-heading {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .page-heading h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Flex Showcase & Form Container */
+        .showcase-container {
+            display: flex;
+            gap: 30px;
+            align-items: stretch;
+            margin-bottom: 60px;
+        }
+
+        /* Showcase Image Card */
+        .img-card {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            min-height: 400px;
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .img-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .img-overlay-caption {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(13, 16, 29, 0.9) 0%, transparent 60%);
+            display: flex;
+            align-items: flex-end;
+            padding: 30px;
+        }
+
+        .img-overlay-caption p {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Glass Card */
+        .form-card {
+            flex: 1.3;
+            min-width: 320px;
+            background: var(--card-glass);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+            color: var(--text-dark);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .form-card h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+
+        .form-card h3 i {
+            color: #ff7924;
+        }
+
+        .form-group-custom {
+            margin-bottom: 16px;
+        }
+
+        .form-label-custom {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-control-custom,
+        .form-select-custom {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .form-control-custom:focus,
+        .form-select-custom:focus {
+            border-color: #ff9f43;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px var(--orange-glow);
+        }
+
+        .product-check-option {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 3px 12px 10px 0;
+            color: var(--text-muted);
+            font-size: .78rem;
+            font-weight: 700;
+        }
+
+        .product-check-option input { width: 16px; height: 16px; accent-color: #ff7924; }
+
+        /* Primary Button Style */
+        .btn-submit-custom {
+            width: 100%;
+            background: var(--orange-grad);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 20px var(--orange-glow);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px var(--orange-glow);
+        }
+
+        /* Recipe / Product Gallery Section */
+        .gallery-section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .recipe-card {
+            background: var(--card-glass);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            color: var(--text-dark);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .my-product-card {
+            background: var(--card-glass);
+            border-radius: 20px;
+            overflow: hidden;
+            color: var(--text-dark);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .my-product-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+
+        .my-product-body {
+            padding: 18px;
+        }
+
+        .my-product-body h4 {
+            margin: 0 0 8px;
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        .my-product-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #e85d2a;
+            font-size: .8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .delete-product-button {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 10px;
+            color: #fff;
+            background: #dc3545;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .video-container {
+            width: 100%;
+            height: 210px;
+            background: #000;
+            position: relative;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .recipe-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .dish-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .meta-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+
+        .meta-text {
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .card-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 10px 0;
+        }
+
+        .btn-whatsapp {
+            margin-top: auto;
+            background: #25d366;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-whatsapp:hover {
+            background: #1ebc57;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .empty-box {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Responsive Layout Adjustments */
+        @media (max-width: 900px) {
+            .showcase-container {
+                flex-direction: column;
+            .gift-box-panel { margin: 36px 0 60px; padding: 28px; border: 1px solid rgba(255,255,255,.18); border-radius: 20px; background: rgba(255,255,255,.96); color: var(--text-dark); }
+            .gift-box-panel h2 { margin: 0 0 8px; font-size: 1.5rem; }
+            .gift-box-panel > p { margin: 0 0 20px; color: var(--text-muted); }
+            .gift-box-form { display: grid; gap: 14px; }
+            .gift-box-products { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+            .gift-box-product { display: flex; gap: 8px; align-items: flex-start; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: .85rem; }
+            .gift-box-product input { margin-top: 3px; accent-color: #ff7924; }
+            @media (max-width: 760px) { .gift-box-products { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+            @media (max-width: 480px) { .gift-box-panel { padding: 20px 16px; } .gift-box-products { grid-template-columns: 1fr; } }
+            }
+            .img-card {
+                min-height: 250px;
+            <section class="gift-box-panel">
+                <h2><i class="fa-solid fa-gift" style="color:#ff7924;"></i> Create a Homemade Gift Box</h2>
+                <p>Combine your products into a custom offer for customers.</p>
+                <form method="post" class="gift-box-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="create_gift_box">
+                    <input type="text" name="gift_box_name" placeholder="Gift box name, e.g. Traditional Indian Box" required class="form-control-custom">
+                    <textarea name="gift_box_description" placeholder="Describe what makes this box special" class="form-control-custom" rows="2"></textarea>
+                    <input type="number" name="gift_box_price" placeholder="Bundle price (₹)" min="0" step="0.01" required class="form-control-custom">
+                    <div class="gift-box-products">
+                        {% for product in product_key %}
+                        <label class="gift-box-product"><input type="checkbox" name="products" value="{{ product.id }}"> <span>{{ product.product_name }}<br><small>₹ {{ product.price }}</small></span></label>
+                        {% empty %}<p>Add products first to create a gift box.</p>{% endfor %}
+                    </div>
+                    <button type="submit" class="btn-submit-custom" {% if not product_key %}disabled{% endif %}><i class="fa-solid fa-gift"></i> Publish Gift Box Offer</button>
+                </form>
+            </section>
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Ambient Animated Background -->
+    <div class="ambient-bg">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <!-- Header Tagline Bar -->
+    <div class="header-tagline">
+        <h2>❤️ Crafting Flavor, Creating Memories ❤️</h2>
+    </div>
+
+    {% include 'common/message.html' %}
+
+    <main class="main-wrapper">
+
+        <div class="page-heading">
+            <h1>Let's Create Something Delicious!</h1>
+        </div>
+
+        <!-- Upper Section: Image Card & Form Card -->
+        <div class="showcase-container">
+
+            <div class="img-card">
+                <img src="{% static 'images/craft.jpg' %}" alt="Product Showcase">
+                <div class="img-overlay-caption">
+                    <p>Showcase Your Products 🛍️</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h3><i class="fa-solid fa-box-open"></i> Product Details</h3>
+
+                <form action="/product/" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Phone Number</label>
+                        <input type="tel" name="phone" placeholder="Enter your mobile number" required class="form-control-custom">
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Product Name</label>
+                        <input type="text" name="product_name" placeholder="Enter product title" required class="form-control-custom">
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Product Category</label>
+                        <select class="form-select-custom" name="product_category" required>
+                            <option value="">Select category</option>
+                            <option value="Pickels">Pickles</option>
+                            <option value="Mocktail And More">Mocktail And More</option>
+                            <option value="Traditional Treats">Traditional Treats</option>
+                            <option value="Chef's Special Burger">Chef's Special Burger</option>
+                            <option value="Snacks">Snacks</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Price (₹)</label>
+                        <input type="text" name="price" placeholder="Enter price" required class="form-control-custom">
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Quantity</label>
+                        <input type="text" name="quantity" placeholder="e.g. 500g, 1 Packet" required class="form-control-custom">
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Product Picture</label>
+                        <input type="file" name="product_pic" required class="form-control-custom">
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Description</label>
+                        <textarea name="description" placeholder="Brief details about product..." required class="form-control-custom" style="height: 80px; resize: none;"></textarea>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Prepared On</label>
+                        <input type="date" name="prepared_on" class="form-control-custom">
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Best Before (days)</label>
+                        <input type="number" name="best_before_days" value="30" min="1" class="form-control-custom">
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Batch Code</label>
+                        <input type="text" name="batch_code" placeholder="e.g. FC-0926" class="form-control-custom">
+                    </div>
+
+                    <label class="product-check-option"><input type="checkbox" name="is_homemade" checked> <span>Homemade product</span></label>
+                    <label class="product-check-option"><input type="checkbox" name="creator_choice"> <span>Mark as Creator's Choice</span></label>
+
+                    <button type="submit" class="btn-submit-custom">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Product
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        {% if product_key %}
+        <section>
+            <h2 class="gallery-section-title">My Products</h2>
+            <div class="gallery-grid">
+                {% for product in product_key %}
+                    <article class="my-product-card">
+                        {% if product.product_pic %}
+                            <img src="{{ product.product_pic.url }}" alt="{{ product.product_name }}">
+                        {% else %}
+                            <img src="{% static 'images/candy.avif' %}" alt="{{ product.product_name }}">
+                        {% endif %}
+                        <div class="my-product-body">
+                            <h4>{{ product.product_name }}</h4>
+                            <div class="my-product-meta">
+                                <span>{{ product.category }}</span>
+                                <span>₹ {{ product.price }}</span>
+                            </div>
+                            <p>{{ product.description }}</p>
+                            <form method="post" action="/delete_product/{{ product.id }}/" onsubmit="return confirm('Delete this product?');">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-product-button">
+                                    <i class="fa-solid fa-trash me-1"></i> Delete Product
+                                </button>
+                            </form>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Lower Section: Recipe Video Gallery Grid -->
+        <section>
+            {% if r_key %}
+                <h2 class="gallery-section-title">Available Recipes</h2>
+
+                <div class="gallery-grid">
+                    {% for recipe in r_key %}
+                        <div class="recipe-card">
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="/media/{{ recipe.recipe_video }}" type="video/mp4">
+                                    Your browser does not support video playback.
+                                </video>
+                            </div>
+
+                            <div class="recipe-body">
+                                <div class="dish-name">{{ recipe.recipe_name }}</div>
+
+                                <span class="meta-label">Ingredients</span>
+                                <p class="meta-text">{{ recipe.ingredients }}</p>
+
+                                <div class="card-divider"></div>
+
+                                <span class="meta-label">Description</span>
+                                <p class="meta-text">{{ recipe.description }}</p>
+
+                                <a href="https://wa.me/91{{ recipe.phone }}" target="_blank" class="btn-whatsapp">
+                                    <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-box">
+                    <i class="fa-solid fa-video-slash" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                    <p style="font-weight: 600;">No Recipe Videos Available At The Moment</p>
+                </div>
+            {% endif %}
+        </section>
+
+    </main>
+
+    {% include 'common/footer.html' %}
+
+</body>
+</html>

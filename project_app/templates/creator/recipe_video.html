@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTER PAGE</title>
+    {% include 'common/common_css.html' %}
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(-45deg, #f6e3c5, #eebf8f, #d97b3f, #b5433a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .page-heading {
+            text-align: center;
+            padding: 30px 20px 10px 20px;
+        }
+
+        .page-heading h1 {
+            color: #fff;
+            font-size: 32px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            margin: 0;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            gap: 5%;
+            justify-content: center;
+            align-items: stretch;
+            padding: 40px 30px 60px 30px;
+            box-sizing: border-box;
+        }
+
+       .img-div {
+    width: 32%;
+    min-width: 280px;
+    {% comment %} height: 480px; {% endcomment %}
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    position: relative;
+}
+
+.img-div img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.img-div:hover img {
+    transform: scale(1.05);
+}
+
+.img-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.75));
+    color: #fff;
+    padding: 25px 18px 16px 18px;
+    font-size: 17px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+        .form-div {
+            width: 45%;
+            min-width: 320px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            border-top: 4px solid #f5a623;
+            box-sizing: border-box;
+        }
+
+        .form-div h3 {
+            color: #b5433a;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f5a623;
+            display: inline-block;
+            padding-bottom: 6px;
+        }
+
+        .form-div .form-label {
+            color: #7a3f3f;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .form-div .form-control,
+        .form-div .form-select {
+            border: 1px solid #e2c9a0;
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+
+        .form-div .form-control:focus,
+        .form-div .form-select:focus {
+            border-color: #f5a623;
+            box-shadow: 0 0 0 0.2rem rgba(245, 166, 35, 0.25);
+        }
+
+        .form-div .btn-danger {
+            background: #b5433a;
+            border: none;
+            padding: 10px 45px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .form-div .btn-danger:hover {
+            background: #8b3a3a;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 900px) {
+            .flex-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .img-div, .form-div {
+                width: 90%;
+            }
+            .img-div {
+                height: 220px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid" style="background: linear-gradient(90deg, #a35c5c, #7a3f3f); height: 50px;">
+        <h2 style="color:#fff; text-align:center; padding-top:8px;">❤️ Crafting Flavor, Creating Memories ❤️</h2>
+    </div>
+
+    <!-- header code  -->
+    {% include 'common/message.html' %}
+    <!-- make all the design in the div -->
+    <div class="main">
+
+        <div class="page-heading">
+            <h1>Let's Create Something Delicious!</h1>
+        </div>
+
+        <div class="flex-container">
+            <div class="img-div">
+                <img src="{% static 'images/craft.jpg' %}" alt="Recipe showcase">
+                <div class="img-caption">Share your recipe with the world 🍲</div>
+            </div>
+
+            <!-- form division -->
+            <div class="form-div">
+                <h3>Recipe Details</h3>
+                <form action="/recipe_video/" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Enter your No</label>
+                        <input type="tel" name="phone" placeholder="Enter your no" required class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="user" class="form-label">Enter your recipe name</label>
+                        <textarea name="name" required class="form-control"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Recipe" class="form-label">Recipe category</label>
+                        <select class="form-select" name="recipe_category" required>
+                            <option value="">Select category</option>
+                            <option value="Pickles">Pickles</option>
+                            <option value="Mocktail And More">Mocktail And More</option>
+                            <option value="Traditional Treats">Traditional Treats</option>
+                            <option value="Chef's special burger">Chef's special burger</option>
+                            <option value="Snacks">Snacks</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Ingredient" class="form-label">Enter your Ingredient</label>
+                        <input type="text" name="Ingredient" placeholder="Enter your Ingredient" required class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Description" class="form-label">Enter your Description</label>
+                        <input type="text" name="Description" placeholder="Enter your description" required class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="video" class="form-label">Upload your recipe video</label>
+                        <input type="file" name="recipe_video" required class="form-control">
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-danger">Submit</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- footer code -->
+    {% include 'common/footer.html' %}
+
+</body>
+
+</html>

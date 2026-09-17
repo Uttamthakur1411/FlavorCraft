@@ -1,0 +1,16 @@
+{% extends "admin/change_list.html" %}
+{% block bodyclass %}{{ block.super }} fc-model-recipevideo fc-list-page{% endblock %}
+{% block content_title %}
+<div class="fc-list-heading">
+	<div>
+		<span class="fc-list-kicker"><i class="fa-solid fa-bowl-food"></i> Recipe library</span>
+		<h1>Recipe videos</h1>
+		<p>Review, publish and organise cooking content from your creators.</p>
+	</div>
+	<div class="fc-list-heading-mark" aria-hidden="true">
+		<i class="fa-solid fa-clapperboard"></i>
+	</div>
+</div>
+{% endblock %}
+{% block title %}Recipe videos | FlavorCraft Admin{% endblock %}
+{% block extrastyle %}{{ block.super }}{% endblock %}

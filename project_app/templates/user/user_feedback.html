@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback | FlavorCraft</title>
+
+    {% include 'common/common_css.html' %}
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --orange-grad: linear-gradient(135deg, #ff9f43 0%, #ff5252 100%);
+            --orange-glow: rgba(255, 159, 67, 0.4);
+            --dark-bg: #0d101d;
+            --card-glass: rgba(255, 255, 255, 0.95);
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Animated Background Orbs */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.35;
+            animation: floatGlow 12s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: #ff7924;
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            width: 550px;
+            height: 550px;
+            background: #6366f1;
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -6s;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 40px) scale(1.1); }
+        }
+
+        /* Top Tagline Bar */
+        .header-tagline {
+            background: var(--orange-grad);
+            padding: 12px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px var(--orange-glow);
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-tagline h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Wrapper */
+        .main-wrapper {
+            position: relative;
+            z-index: 2;
+            min-height: calc(100vh - 140px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphic Feedback Card */
+        .feedback-card {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-glass);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+            color: var(--text-dark);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Input Controls & Groups */
+        .form-group-custom {
+            margin-bottom: 20px;
+        }
+
+        .custom-input-group {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .custom-input-group:focus-within {
+            border-color: #ff9f43;
+            box-shadow: 0 0 0 4px var(--orange-glow);
+            background: #ffffff;
+        }
+
+        .input-icon {
+            padding: 14px 18px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            background: transparent;
+        }
+
+        .custom-input-group input, 
+        .custom-input-group textarea {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            padding: 14px 16px 14px 0;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .custom-input-group textarea {
+            padding: 14px 16px;
+            resize: none;
+            height: 110px;
+        }
+
+        .form-label-custom {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* Star Rating Controls */
+        .rating-wrapper {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 6px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 1.5rem;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #ff9f43;
+            transform: scale(1.1);
+        }
+
+        /* Animated Submit Button */
+        .btn-submit {
+            width: 100%;
+            background: var(--orange-grad);
+            color: #ffffff;
+            border: none;
+            padding: 15px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px var(--orange-glow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px var(--orange-glow);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Success Overlay Screen */
+        .success-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease;
+            z-index: 10;
+        }
+
+        .success-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .success-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .success-overlay h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .success-overlay p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 576px) {
+            .feedback-card {
+                padding: 25px 20px;
+            }
+            .page-title {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Dynamic Glowing Ambient BG -->
+    <div class="ambient-bg">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <!-- Header Tagline -->
+    <div class="header-tagline">
+        <h2>❤️ Crafting Flavor, Creating Memories ❤️</h2>
+    </div>
+
+    {% include 'common/message.html' %}
+
+    <main class="main-wrapper">
+
+        <h1 class="page-title">😊 We'd Love Your Feedback 😊</h1>
+
+        <div class="feedback-card">
+
+            <!-- Success Message Overlay -->
+            <div class="success-overlay" id="successOverlay">
+                <div class="success-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h3>Thank You!</h3>
+                <p>Your review has been submitted successfully. We appreciate your feedback!</p>
+                <button type="button" class="btn-submit" onclick="resetForm()" style="width: auto; padding: 10px 24px;">
+                    Close
+                </button>
+            </div>
+
+            <!-- Feedback Form -->
+            <form id="feedbackForm" action="/user_feedback/" method="post">
+                {% csrf_token %}
+
+                <!-- Full Name Field -->
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Your Name</label>
+                    <div class="custom-input-group">
+                        <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" name="name" value="{{ logged_user_name }}" placeholder="Enter your name" required readonly>
+                    </div>
+                </div>
+
+                <!-- Email Field -->
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Email Address</label>
+                    <div class="custom-input-group">
+                        <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
+                        <input type="email" name="email" value="{{ logged_user_email }}" placeholder="Enter your email" required readonly>
+                    </div>
+                </div>
+
+                <!-- Review Textarea -->
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Your Experience 🤗</label>
+                    <div class="custom-input-group">
+                        <textarea name="review" placeholder="Tell us about your experience..." required></textarea>
+                    </div>
+                </div>
+
+                <!-- Star Rating Field -->
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Rating</label>
+                    <div class="rating-wrapper">
+                        <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted);">Select Stars:</span>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" required>
+                            <label for="star5" title="5 Stars"><i class="fa-solid fa-star"></i></label>
+
+                            <input type="radio" id="star4" name="rating" value="4">
+                            <label for="star4" title="4 Stars"><i class="fa-solid fa-star"></i></label>
+
+                            <input type="radio" id="star3" name="rating" value="3">
+                            <label for="star3" title="3 Stars"><i class="fa-solid fa-star"></i></label>
+
+                            <input type="radio" id="star2" name="rating" value="2">
+                            <label for="star2" title="2 Stars"><i class="fa-solid fa-star"></i></label>
+
+                            <input type="radio" id="star1" name="rating" value="1">
+                            <label for="star1" title="1 Star"><i class="fa-solid fa-star"></i></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit">
+                    <span>Submit Feedback</span>
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
+
+    {% include 'common/footer.html' %}
+
+    <script>
+        // Optional JS animation on form submission demo
+        const form = document.getElementById('feedbackForm');
+        const successOverlay = document.getElementById('successOverlay');
+
+        // Note: If submitting via normal Django POST, Django will handle redirect.
+        // If submitting via AJAX, you can trigger this function on success:
+        function showSuccessPopup() {
+            successOverlay.classList.add('active');
+        }
+
+        function resetForm() {
+            successOverlay.classList.remove('active');
+            form.reset();
+        }
+    </script>
+
+</body>
+</html> 

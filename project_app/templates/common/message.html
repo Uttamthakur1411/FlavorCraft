@@ -1,0 +1,179 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+
+    .toast-container-custom {
+        position: fixed;
+        top: 85px;
+        right: 24px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 380px;
+        width: 100%;
+        pointer-events: none;
+    }
+
+    .toast-card {
+        pointer-events: auto;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 14px 16px;
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+        animation: toastSlideIn 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+        transition: all 0.25s ease;
+    }
+
+    .toast-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.12);
+    }
+
+    .toast-content-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+    }
+
+    .toast-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .toast-message-text {
+        color: #1e293b;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.4;
+        margin: 0;
+    }
+
+    .toast-card.toast-success {
+        border-left: 4px solid #10b981;
+    }
+    .toast-card.toast-success .toast-icon {
+        background: #d1fae5;
+        color: #059669;
+    }
+
+    .toast-card.toast-error,
+    .toast-card.toast-danger {
+        border-left: 4px solid #ef4444;
+    }
+    .toast-card.toast-error .toast-icon,
+    .toast-card.toast-danger .toast-icon {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .toast-card.toast-warning {
+        border-left: 4px solid #f59e0b;
+    }
+    .toast-card.toast-warning .toast-icon {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .toast-card.toast-info,
+    .toast-card.toast-primary {
+        border-left: 4px solid #3b82f6;
+    }
+    .toast-card.toast-info .toast-icon,
+    .toast-card.toast-primary .toast-icon {
+        background: #dbeafe;
+        color: #2563eb;
+    }
+
+    .toast-card .btn-close-custom {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .toast-card .btn-close-custom:hover {
+        color: #475569;
+        background: rgba(241, 245, 249, 1);
+    }
+
+    @keyframes toastSlideIn {
+        from {
+            opacity: 0;
+            transform: translateX(100px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .toast-container-custom {
+            right: 16px;
+            left: 16px;
+            max-width: calc(100% - 32px);
+        }
+    }
+</style>
+
+{% if messages %}
+<div class="toast-container-custom" aria-live="polite" aria-atomic="true">
+    {% for message in messages %}
+        <div class="toast-card toast-{{ message.tags|default:'info' }}">
+            <div class="toast-content-wrapper">
+                <div class="toast-icon">
+                    {% if message.tags == 'success' %}
+                        <i class="fa-solid fa-check"></i>
+                    {% elif 'error' in message.tags or 'danger' in message.tags %}
+                        <i class="fa-solid fa-xmark"></i>
+                    {% elif 'warning' in message.tags %}
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    {% else %}
+                        <i class="fa-solid fa-info"></i>
+                    {% endif %}
+                </div>
+                <p class="toast-message-text">{{ message }}</p>
+            </div>
+            <button type="button" class="btn-close-custom" aria-label="Close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toasts = document.querySelectorAll('.toast-card');
+        toasts.forEach((toast, index) => {
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(30px)';
+                setTimeout(() => toast.remove(), 220);
+            }, 3000 + index * 250);
+        });
+    });
+</script>
+{% endif %}

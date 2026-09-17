@@ -1,0 +1,1132 @@
+```html
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | FlavorCraft</title>
+
+    {% include 'common/common_css.html' %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --green: #117a4b;
+            --green-dark: #075c38;
+            --green-light: #e9f8f0;
+            --orange: #f28b4b;
+            --orange-light: #fff1e7;
+            --dark: #17231c;
+            --text: #68756d;
+            --white: #ffffff;
+            --border: #e5ece7;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "DM Sans", sans-serif;
+            color: var(--dark);
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 7% 12%, rgba(17,122,75,.13), transparent 27%),
+                radial-gradient(circle at 93% 25%, rgba(242,139,75,.13), transparent 25%),
+                linear-gradient(135deg, #fffaf5 0%, #f3faf6 50%, #fff8f1 100%);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 420px;
+            height: 420px;
+            left: -190px;
+            top: 25%;
+            border-radius: 50%;
+            background: rgba(17,122,75,.08);
+            filter: blur(90px);
+            animation: blobOne 10s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            right: -190px;
+            bottom: 5%;
+            border-radius: 50%;
+            background: rgba(242,139,75,.09);
+            filter: blur(90px);
+            animation: blobTwo 9s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        .floating-back-button {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 2000;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #0d5c38, #198754, #27ad70);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            box-shadow: 0 14px 28px rgba(17, 122, 75, .24);
+            border: 1px solid rgba(255,255,255,.18);
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .floating-back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 32px rgba(17, 122, 75, .28);
+        }
+
+        @media (max-width: 767px) {
+            .floating-back-button {
+                top: 14px;
+                left: 12px;
+                padding: 9px 12px;
+                font-size: 11px;
+            }
+        }
+
+        @keyframes blobOne {
+            from {
+                transform: translate(0,0) scale(1);
+            }
+            to {
+                transform: translate(70px,-30px) scale(1.12);
+            }
+        }
+
+        @keyframes blobTwo {
+            from {
+                transform: translate(0,0) scale(1);
+            }
+            to {
+                transform: translate(-55px,25px) scale(1.14);
+            }
+        }
+
+        .page-noise {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: .025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+        }
+
+        .top-bar {
+            position: relative;
+            z-index: 20;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 15px;
+            color: #fff;
+            background: linear-gradient(
+                100deg,
+                #075c38,
+                #117a4b,
+                #2baa70,
+                #117a4b,
+                #075c38
+            );
+            background-size: 250% 100%;
+            animation: gradientFlow 8s ease infinite;
+            box-shadow: 0 5px 20px rgba(7,92,56,.15);
+        }
+
+        .top-bar-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .4px;
+        }
+
+        .top-bar-content i {
+            color: #ffd166;
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .site-header {
+            position: relative;
+            z-index: 5000;
+        }
+
+        .site-header .navbar {
+            background: rgba(255,255,255,.80) !important;
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border-bottom: 1px solid rgba(17,122,75,.08);
+            box-shadow: 0 7px 28px rgba(20,66,44,.06);
+        }
+
+        .register-page {
+            position: relative;
+            z-index: 2;
+            padding: 42px 18px 55px;
+        }
+
+        .register-wrapper {
+            width: 100%;
+            max-width: 970px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: .82fr 1.18fr;
+            overflow: hidden;
+            border-radius: 25px;
+            background: rgba(255,255,255,.76);
+            border: 1px solid rgba(255,255,255,.95);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow:
+                0 28px 75px rgba(25,70,48,.12),
+                0 8px 25px rgba(25,70,48,.05);
+            animation: wrapperAppear .8s cubic-bezier(.2,.8,.2,1);
+        }
+
+        @keyframes wrapperAppear {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .register-visual {
+            position: relative;
+            min-height: 650px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding: 34px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(4,67,39,.90),
+                    rgba(17,122,75,.76)
+                ),
+                url("{% static 'images/Craft1.jpg' %}") center/cover;
+        }
+
+        .register-visual::before {
+            content: "";
+            position: absolute;
+            width: 330px;
+            height: 330px;
+            top: -170px;
+            right: -150px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.20);
+        }
+
+        .register-visual::after {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            bottom: -150px;
+            left: -120px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.15);
+        }
+
+        .visual-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    to top,
+                    rgba(3,34,21,.94),
+                    rgba(3,34,21,.42) 55%,
+                    rgba(3,34,21,.10)
+                );
+        }
+
+        .brand-mark {
+            position: absolute;
+            top: 30px;
+            left: 31px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            width: 37px;
+            height: 37px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            color: var(--green);
+            background: #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,.16);
+        }
+
+        .visual-content {
+            position: relative;
+            z-index: 4;
+            color: #fff;
+        }
+
+        .visual-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 11px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(255,255,255,.18);
+            border-radius: 50px;
+            background: rgba(255,255,255,.10);
+            backdrop-filter: blur(12px);
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .visual-badge i {
+            color: #ffd166;
+        }
+
+        .visual-content h1 {
+            max-width: 350px;
+            margin: 0 0 13px;
+            font-family: "Playfair Display", serif;
+            font-size: clamp(2.2rem, 4vw, 3.15rem);
+            line-height: 1.1;
+            letter-spacing: -1px;
+            font-weight: 800;
+        }
+
+        .visual-content h1 span {
+            color: #ffd29b;
+        }
+
+        .visual-content p {
+            max-width: 350px;
+            margin: 0;
+            color: rgba(255,255,255,.76);
+            font-size: 10px;
+            line-height: 1.85;
+        }
+
+        .visual-points {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            margin-top: 21px;
+        }
+
+        .visual-point {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,.87);
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .visual-point i {
+            width: 21px;
+            height: 21px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            color: #8ff0bc;
+            background: rgba(255,255,255,.10);
+        }
+
+        .floating-badge {
+            position: absolute;
+            top: 92px;
+            right: 24px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 11px;
+            border-radius: 13px;
+            color: #34443b;
+            background: rgba(255,255,255,.93);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 35px rgba(0,0,0,.15);
+            font-size: 8px;
+            font-weight: 800;
+            animation: badgeFloat 4s ease-in-out infinite;
+        }
+
+        .floating-badge i {
+            color: var(--orange);
+        }
+
+        @keyframes badgeFloat {
+            0%,100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-9px);
+            }
+        }
+
+        .register-form-area {
+            position: relative;
+            padding: 38px 43px;
+            background: rgba(255,255,255,.92);
+        }
+
+        .form-header {
+            margin-bottom: 22px;
+        }
+
+        .form-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 11px;
+            border-radius: 13px;
+            color: var(--green);
+            background: linear-gradient(135deg,#e9f8f0,#f6fffa);
+            box-shadow: 0 9px 22px rgba(17,122,75,.10);
+            font-size: 17px;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%,100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        .form-header small {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--orange);
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .form-header h2 {
+            margin: 0;
+            font-family: "Playfair Display", serif;
+            font-size: 29px;
+            font-weight: 800;
+            letter-spacing: -.6px;
+        }
+
+        .form-header p {
+            margin: 6px 0 0;
+            color: #7d8881;
+            font-size: 9px;
+            line-height: 1.7;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px 14px;
+        }
+
+        .form-group {
+            margin: 0;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            color: #34433a;
+            font-size: 8px;
+            font-weight: 800;
+        }
+
+        .field {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            z-index: 2;
+            transform: translateY(-50%);
+            color: #98a39d;
+            font-size: 11px;
+            transition: color .3s ease;
+        }
+
+        .form-control,
+        .form-select {
+            width: 100%;
+            height: 40px;
+            padding: 0 12px 0 34px !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 10px !important;
+            outline: none;
+            background: #f9fcfa !important;
+            color: #26342c;
+            font-family: "DM Sans", sans-serif;
+            font-size: 9px !important;
+            box-shadow: none !important;
+            transition: all .3s ease;
+        }
+
+        textarea.form-control {
+            height: 65px;
+            min-height: 65px;
+            padding: 10px 12px 10px 34px !important;
+            resize: vertical;
+        }
+
+        .form-control::placeholder {
+            color: #a6afaa;
+        }
+
+        .form-control:hover,
+        .form-select:hover {
+            border-color: rgba(17,122,75,.25) !important;
+            background: #fff !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--green) !important;
+            background: #fff !important;
+            box-shadow: 0 0 0 3px rgba(17,122,75,.07) !important;
+        }
+
+        .field:focus-within .field-icon {
+            color: var(--green);
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .profile-upload {
+            position: relative;
+        }
+
+        .profile-upload .form-control {
+            height: 42px;
+            padding: 7px 10px 7px 34px !important;
+            cursor: pointer;
+        }
+
+        .profile-upload .field-icon {
+            top: 21px;
+        }
+
+        .form-hint {
+            margin-top: 4px;
+            color: #99a29d;
+            font-size: 7px;
+        }
+
+        .submit-area {
+            margin-top: 20px;
+        }
+
+        .register-button {
+            position: relative;
+            width: 100%;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            overflow: hidden;
+            border: 0;
+            border-radius: 11px;
+            color: #fff;
+            background: linear-gradient(135deg,#075c38,#15935a,#2bad73);
+            background-size: 180% 180%;
+            box-shadow: 0 12px 25px rgba(17,122,75,.22);
+            font-family: "DM Sans", sans-serif;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all .35s ease;
+            animation: buttonGradient 6s ease infinite;
+        }
+
+        @keyframes buttonGradient {
+            0%,100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .register-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 65%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,.38),
+                transparent
+            );
+            transform: skewX(-20deg);
+            transition: left .65s ease;
+        }
+
+        .register-button:hover::before {
+            left: 135%;
+        }
+
+        .register-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 17px 32px rgba(17,122,75,.28);
+        }
+
+        .register-button i {
+            transition: transform .3s ease;
+        }
+
+        .register-button:hover i {
+            transform: translateX(4px);
+        }
+
+        .form-security {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding: 8px;
+            border-radius: 9px;
+            color: #7d8881;
+            background: #f7faf8;
+            border: 1px solid #edf2ee;
+            font-size: 7px;
+            font-weight: 700;
+        }
+
+        .form-security i {
+            color: var(--green);
+        }
+
+        .corner-decoration {
+            position: absolute;
+            right: -35px;
+            bottom: -35px;
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            background: rgba(17,122,75,.045);
+        }
+
+        @media (max-width: 900px) {
+            .register-wrapper {
+                max-width: 680px;
+                grid-template-columns: 1fr;
+            }
+
+            .register-visual {
+                min-height: 320px;
+                padding: 30px;
+            }
+
+            .register-form-area {
+                padding: 35px;
+            }
+
+            .visual-content h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .top-bar {
+                min-height: 36px;
+            }
+
+            .top-bar-content {
+                font-size: 8px;
+            }
+
+            .register-page {
+                padding: 25px 11px 40px;
+            }
+
+            .register-wrapper {
+                border-radius: 20px;
+            }
+
+            .register-visual {
+                min-height: 275px;
+                padding: 24px;
+            }
+
+            .brand-mark {
+                top: 20px;
+                left: 22px;
+                font-size: 14px;
+            }
+
+            .brand-icon {
+                width: 32px;
+                height: 32px;
+                border-radius: 10px;
+                font-size: 11px;
+            }
+
+            .floating-badge {
+                top: 18px;
+                right: 17px;
+                font-size: 7px;
+                padding: 7px 9px;
+            }
+
+            .visual-content h1 {
+                font-size: 2rem;
+            }
+
+            .visual-content p {
+                font-size: 9px;
+            }
+
+            .visual-points {
+                gap: 6px;
+                margin-top: 14px;
+            }
+
+            .visual-point {
+                font-size: 8px;
+            }
+
+            .register-form-area {
+                padding: 28px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 13px;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .form-header h2 {
+                font-size: 26px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#" id="floatingBackButton" class="floating-back-button" aria-label="Go back">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Back</span>
+    </a>
+<div class="page-noise"></div>
+
+<div class="top-bar">
+    <div class="top-bar-content">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        Crafting Flavor, Creating Memories
+        <i class="fa-solid fa-heart"></i>
+    </div>
+</div>
+
+{% include 'common/message.html' %}
+
+<main class="register-page">
+
+    <div class="register-wrapper">
+
+        <section class="register-visual">
+
+            <div class="visual-overlay"></div>
+
+            <div class="brand-mark">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                FlavorCraft
+            </div>
+
+            <div class="floating-badge">
+                <i class="fa-solid fa-heart"></i>
+                Made With Love
+            </div>
+
+            <div class="visual-content">
+
+                <div class="visual-badge">
+                    <i class="fa-solid fa-leaf"></i>
+                    JOIN THE COMMUNITY
+                </div>
+
+                <h1>
+                    Share your
+                    <span>flavor</span>
+                    with the world.
+                </h1>
+
+                <p>
+                    Create your FlavorCraft profile and become part
+                    of a growing community of passionate home chefs
+                    and food lovers.
+                </p>
+
+                <div class="visual-points">
+
+                    <div class="visual-point">
+                        <i class="fa-solid fa-check"></i>
+                        Showcase your homemade creations
+                    </div>
+
+                    <div class="visual-point">
+                        <i class="fa-solid fa-check"></i>
+                        Share recipes and cooking ideas
+                    </div>
+
+                    <div class="visual-point">
+                        <i class="fa-solid fa-check"></i>
+                        Connect with food lovers
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="register-form-area">
+
+            <div class="form-header">
+
+                <div class="form-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+                <small>Create Your Account</small>
+
+                <h2>{% if registration_role == "user" %}Create Your Account{% else %}Become a Creator{% endif %}</h2>
+
+                <p>
+                    Fill in your details and start your FlavorCraft journey.
+                </p>
+
+            </div>
+
+            <form action="{% if registration_role == "user" %}/user_registration/{% else %}/creator_registration/{% endif %}" method="post" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Full Name
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-user field-icon"></i>
+
+                            <input
+                                type="text"
+                                name="name"
+                                required
+                                class="form-control"
+                                placeholder="Enter your name"
+                                autocomplete="name"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Email Address
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-envelope field-icon"></i>
+
+                            <input
+                                type="email"
+                                name="email"
+                                required
+                                class="form-control"
+                                placeholder="Enter your email"
+                                autocomplete="email"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Password
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-lock field-icon"></i>
+
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                required
+                                class="form-control"
+                                placeholder="Create password"
+                                autocomplete="new-password"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Phone Number
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-phone field-icon"></i>
+
+                            <input
+                                type="tel"
+                                name="phone"
+                                required
+                                class="form-control"
+                                placeholder="Enter phone number"
+                                autocomplete="tel"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            City
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-location-dot field-icon"></i>
+
+                            <select
+                                class="form-select"
+                                name="city"
+                                required
+                            >
+                                <option value="">Select city</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Lucknow">Lucknow</option>
+                                <option value="Vanaras">Vanaras</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Profile Picture
+                        </label>
+
+                        <div class="field profile-upload">
+
+                            <i class="fa-solid fa-camera field-icon"></i>
+
+                            <input
+                                type="file"
+                                name="profile_pic"
+                                class="form-control"
+                                accept="image/*"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group full">
+
+                        <label class="form-label">
+                            About Me
+                        </label>
+
+          pytho              <div class="field">
+
+                            <i class="fa-solid fa-pen field-icon"></i>
+
+                            <textarea
+                                name="about_me"
+                                required
+                                class="form-control"
+                                placeholder="Tell us something about yourself, your cooking style or specialties..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="submit-area">
+
+                    <button type="submit" class="register-button">
+
+                        <span>Create My Account</span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+            <div class="form-security">
+                <i class="fa-solid fa-shield-halved"></i>
+                Your information is securely submitted to FlavorCraft
+            </div>
+
+            <div class="corner-decoration"></div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% include 'common/footer.html' %}
+
+<script>
+    const floatingBackButtons = document.querySelectorAll('.floating-back-button');
+    let lastScrollY = window.scrollY;
+
+    function handleFloatingBackButtonState() {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY <= 20) {
+            floatingBackButtons.forEach(function (button) {
+                button.classList.remove('is-hidden');
+            });
+        } else if (currentScrollY > lastScrollY) {
+            floatingBackButtons.forEach(function (button) {
+                button.classList.add('is-hidden');
+            });
+        } else {
+            floatingBackButtons.forEach(function (button) {
+                button.classList.remove('is-hidden');
+            });
+        }
+
+        lastScrollY = currentScrollY;
+    }
+
+    floatingBackButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            if (window.scrollY > 40) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+            if (document.referrer && document.referrer.indexOf(window.location.origin) === 0) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
+        });
+    });
+
+    handleFloatingBackButtonState();
+    window.addEventListener('scroll', handleFloatingBackButtonState, { passive: true });
+</script>
+
+</body>
+</html>
+```

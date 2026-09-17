@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Font Awesome 7 Icon Sheet</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+
+
+<style>
+
+@page {
+    size: A4;
+    margin: 10mm;
+}
+
+
+body{
+
+    font-family:Arial,sans-serif;
+    margin:0;
+    padding:10px;
+    background:white;
+
+}
+
+
+h1{
+
+    text-align:center;
+    font-size:22px;
+    margin:5px;
+
+}
+
+
+
+.category-title{
+
+    font-size:15px;
+    margin:8px 0;
+    border-bottom:1px solid #333;
+
+}
+
+
+
+.container{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(6,1fr);
+
+    gap:8px;
+
+}
+
+
+
+.card{
+
+    border:1px solid #ddd;
+
+    height:75px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:11px;
+
+}
+
+
+
+.icon{
+
+    font-size:25px;
+
+    margin-bottom:8px;
+
+    color:#222;
+
+}
+
+
+
+.class-name{
+
+    text-align:center;
+
+    word-break:break-word;
+
+}
+
+
+
+@media print{
+
+body{
+
+    zoom:0.85;
+
+}
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<h1>
+Font Awesome 7 Developer Icons
+</h1>
+
+
+<div id="icons"></div>
+
+
+
+<script>
+
+
+const icons={
+
+
+"Navigation":[
+
+"fa-solid fa-house",
+"fa-solid fa-bars",
+"fa-solid fa-arrow-left",
+"fa-solid fa-arrow-right",
+"fa-solid fa-chevron-down",
+"fa-solid fa-chevron-up",
+"fa-solid fa-magnifying-glass"
+
+],
+
+
+"User":[
+
+"fa-solid fa-user",
+"fa-solid fa-users",
+"fa-solid fa-user-plus",
+"fa-solid fa-user-pen",
+"fa-solid fa-id-card",
+"fa-solid fa-user-shield"
+
+],
+
+
+"Security":[
+
+"fa-solid fa-lock",
+"fa-solid fa-lock-open",
+"fa-solid fa-key",
+"fa-solid fa-shield",
+"fa-solid fa-fingerprint"
+
+],
+
+
+"Files":[
+
+"fa-solid fa-file",
+"fa-solid fa-file-pdf",
+"fa-solid fa-file-word",
+"fa-solid fa-file-excel",
+"fa-solid fa-folder",
+"fa-solid fa-folder-open"
+
+],
+
+
+"Communication":[
+
+"fa-solid fa-envelope",
+"fa-solid fa-phone",
+"fa-solid fa-message",
+"fa-solid fa-comment",
+"fa-solid fa-comments"
+
+],
+
+
+"E-Commerce":[
+
+"fa-solid fa-cart-shopping",
+"fa-solid fa-bag-shopping",
+"fa-solid fa-credit-card",
+"fa-solid fa-wallet",
+"fa-solid fa-receipt"
+
+],
+
+
+"Dashboard":[
+
+"fa-solid fa-chart-line",
+"fa-solid fa-chart-bar",
+"fa-solid fa-chart-pie",
+"fa-solid fa-table",
+"fa-solid fa-database"
+
+],
+
+
+"CRUD":[
+
+"fa-solid fa-plus",
+"fa-solid fa-minus",
+"fa-solid fa-pen",
+"fa-solid fa-trash",
+"fa-solid fa-copy",
+"fa-solid fa-download",
+"fa-solid fa-upload"
+
+],
+
+
+"Settings":[
+
+"fa-solid fa-gear",
+"fa-solid fa-sliders",
+"fa-solid fa-wrench"
+
+],
+
+
+"Social":[
+
+"fa-brands fa-facebook",
+"fa-brands fa-instagram",
+"fa-brands fa-x-twitter",
+"fa-brands fa-linkedin",
+"fa-brands fa-github",
+"fa-brands fa-youtube"
+
+],
+
+
+"Development":[
+
+"fa-solid fa-code",
+"fa-solid fa-terminal",
+"fa-solid fa-laptop-code",
+"fa-solid fa-server",
+"fa-solid fa-globe"
+
+],
+
+
+"Location":[
+
+"fa-solid fa-location-dot",
+"fa-solid fa-map",
+"fa-solid fa-compass",
+"fa-solid fa-route"
+
+],
+
+
+"Media":[
+
+"fa-solid fa-image",
+"fa-solid fa-camera",
+"fa-solid fa-video",
+"fa-solid fa-play",
+"fa-solid fa-music"
+
+]
+
+
+};
+
+
+
+
+let html="";
+
+
+for(let category in icons){
+
+
+html+=`
+
+<div class="category-title">
+${category}
+</div>
+
+
+<div class="container">
+
+`;
+
+
+icons[category].forEach(icon=>{
+
+
+html+=`
+
+<div class="card">
+
+
+<div class="icon">
+
+<i class="${icon}"></i>
+
+</div>
+
+
+<div class="class-name">
+
+${icon}
+
+</div>
+
+
+</div>
+
+
+`;
+
+});
+
+
+html+=`</div>`;
+
+}
+
+
+document.getElementById("icons").innerHTML=html;
+
+
+</script>
+
+
+</body>
+</html>

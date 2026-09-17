@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.product_name }} | FlavorCraft</title>
+    {% include 'common/common_css.html' %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root { --pd-ink:#173c3b; --pd-muted:#718287; --pd-line:#dce9e4; --pd-green:#238a68; }
+        body { margin:0; background:linear-gradient(135deg,#f1f8f5,#fff9f0); color:var(--pd-ink); font-family:'DM Sans',sans-serif; }
+        .pd-page { min-height:calc(100vh - 70px); padding:52px 18px 85px; }
+        .pd-shell { width:min(1120px,100%); margin:auto; }
+        .pd-back { display:inline-flex; align-items:center; gap:7px; margin-bottom:20px; color:var(--pd-green); font-size:13px; font-weight:800; text-decoration:none; }
+        .pd-card { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); overflow:hidden; border:1px solid var(--pd-line); border-radius:20px; background:rgba(255,255,255,.92); box-shadow:0 22px 55px rgba(30,76,63,.1); animation:pd-in .55s ease both; }
+        @keyframes pd-in { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+        .pd-image { min-height:510px; background:#eaf5f0; }
+        .pd-image img { width:100%; height:100%; object-fit:cover; }
+        .pd-info { padding:45px; }
+        .pd-badge { display:inline-flex; align-items:center; gap:6px; margin-bottom:15px; padding:7px 10px; border-radius:999px; background:#e9f7f0; color:var(--pd-green); font-size:11px; font-weight:800; }
+        .pd-info h1 { margin:0; font:800 36px 'Manrope',sans-serif; }
+        .pd-creator { margin:10px 0 0; color:var(--pd-muted); font-size:13px; }
+        .pd-creator a { color:var(--pd-green); font-weight:800; text-decoration:none; }
+        .pd-price { margin:27px 0 6px; color:var(--pd-green); font:800 27px 'Manrope',sans-serif; }
+        .pd-meta { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0; }
+        .pd-meta span { padding:7px 10px; border:1px solid var(--pd-line); border-radius:7px; color:var(--pd-muted); font-size:11px; font-weight:700; }
+        .pd-description { margin:22px 0; color:#4b6365; font-size:14px; line-height:1.7; }
+        .pd-order { display:flex; align-items:center; gap:10px; margin-top:26px; }
+        .pd-qty { width:72px; min-height:46px; padding:0 10px; border:1px solid var(--pd-line); border-radius:8px; }
+        .pd-button { min-height:46px; flex:1; border:0; border-radius:8px; background:linear-gradient(135deg,#16764e,#2aaa7b); color:#fff; font-weight:800; cursor:pointer; box-shadow:0 10px 22px rgba(35,138,104,.2); }
+        .pd-button:hover { transform:translateY(-2px); }
+        .pd-freshness { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:25px; padding-top:20px; border-top:1px solid #edf3f0; }
+        .pd-freshness strong,.pd-freshness span { display:block; }
+        .pd-freshness strong { margin-bottom:4px; font-size:11px; }
+        .pd-freshness span { color:var(--pd-muted); font-size:10px; }
+        @media(max-width:760px) { .pd-card { grid-template-columns:1fr; } .pd-image { min-height:320px; } .pd-info { padding:28px 22px; } .pd-info h1 { font-size:29px; } }
+    </style>
+</head>
+<body>
+    {% include 'common/header.html' %}
+    <main class="pd-page"><div class="pd-shell">
+        <a class="pd-back" href="{% url 'home_page' %}#products"><i class="fa-solid fa-arrow-left"></i> Back to products</a>
+        <article class="pd-card">
+            <div class="pd-image">{% if product.product_pic %}<img src="{{ product.product_pic.url }}" alt="{{ product.product_name }}">{% else %}<img src="{% static 'images/candy.avif' %}" alt="{{ product.product_name }}">{% endif %}</div>
+            <div class="pd-info">
+                <span class="pd-badge"><i class="fa-solid fa-house-heart"></i> {% if product.creator_choice %}Creator's choice{% else %}Homemade{% endif %}</span>
+                <h1>{{ product.product_name }}</h1>
+                <p class="pd-creator">Made by <a href="{% url 'creator_portfolio' product.creator.email %}">{{ product.creator.name }}</a> &middot; {{ product.creator.city }}</p>
+                <div class="pd-price">₹ {{ product.price }}</div>
+                <div class="pd-meta"><span>{{ product.category }}</span><span>{{ product.quantity }} pack</span><span><i class="fa-solid fa-bolt"></i> Freshly listed</span></div>
+                <p class="pd-description">{{ product.description }}</p>
+                <form class="pd-order" method="post" action="{% url 'add_to_cart' product.id %}">{% csrf_token %}<input class="pd-qty" type="number" name="quantity" value="1" min="1"><button class="pd-button" type="submit"><i class="fa-solid fa-cart-plus"></i> Add to cart</button></form>
+                <div class="pd-freshness"><div><strong>Prepared</strong><span>{% if product.prepared_on %}{{ product.prepared_on }}{% else %}Made fresh{% endif %}</span></div><div><strong>Best before</strong><span>{{ product.best_before_days }} days</span></div><div><strong>Batch</strong><span>{{ product.batch_code|default:"Fresh batch" }}</span></div></div>
+            </div>
+        </article>
+    </div></main>
+</body>
+</html>

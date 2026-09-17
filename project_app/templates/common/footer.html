@@ -1,0 +1,158 @@
+<style>
+    :root {
+        --footer-bg: #0d101d;
+        --footer-card: #13172e;
+        --accent-orange: #ff9f43;
+        --accent-pink: #ff5252;
+        --text-muted: #94a3b8;
+    }
+
+    .modern-footer {
+        background-color: var(--footer-bg);
+        position: relative;
+        overflow: hidden;
+        padding: 24px 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Subtle Ambient Light Effect */
+    .footer-glow {
+        position: absolute;
+        width: 300px;
+        height: 100px;
+        background: linear-gradient(135deg, #ff9f43, #ff5252);
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        filter: blur(80px);
+        opacity: 0.25;
+        pointer-events: none;
+    }
+
+    .footer-content {
+        position: relative;
+        z-index: 2;
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Tagline Gradient & Heart Pulse */
+    .footer-tagline {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #ffffff;
+        letter-spacing: 0.5px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .heart-icon {
+        color: var(--accent-pink);
+        display: inline-block;
+        animation: heartPulse 1.5s infinite ease-in-out;
+    }
+
+    @keyframes heartPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.25); }
+    }
+
+    /* Copyright Line */
+    .footer-copyright {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin: 0;
+        text-align: center;
+    }
+
+    .developer-link {
+        background: linear-gradient(135deg, #ff9f43 0%, #ff5252 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        text-decoration: none;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .developer-link:hover {
+        opacity: 0.9;
+        letter-spacing: 0.3px;
+    }
+
+    /* Social Icons Row */
+    .footer-socials {
+        display: flex;
+        gap: 14px;
+        margin-top: 4px;
+    }
+
+    .social-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .social-btn:hover {
+        background: var(--accent-orange);
+        color: #ffffff;
+        transform: translateY(-4px) scale(1.1);
+        box-shadow: 0 6px 15px rgba(255, 159, 67, 0.4);
+        border-color: transparent;
+    }
+
+    @media (max-width: 576px) {
+        .footer-tagline {
+            font-size: 0.85rem;
+        }
+        .footer-copyright {
+            font-size: 0.78rem;
+        }
+    }
+</style>
+
+<footer class="modern-footer">
+    <!-- Ambient Glow BG -->
+    <div class="footer-glow"></div>
+
+    <div class="footer-content">
+        <!-- Tagline with Pulsing Heart -->
+        <p class="footer-tagline">
+            <span class="heart-icon"><i class="fa-solid fa-heart"></i></span>
+            Crafting Flavors, Creating Memories
+            <span class="heart-icon"><i class="fa-solid fa-heart"></i></span>
+        </p>
+
+        <!-- Copyright & Developer Credit -->
+        <p class="footer-copyright">
+            © 2026 <strong style="color: #ffffff;">FlavorCraft</strong>. All Rights Reserved | Designed & Developed with passion by 
+            <a href="#" class="developer-link">Divya Mishra</a>
+        </p>
+
+        <!-- Social Media Links -->
+        <div class="footer-socials">
+            <a href="#" class="social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-btn" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" class="social-btn" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        </div>
+    </div>
+</footer>

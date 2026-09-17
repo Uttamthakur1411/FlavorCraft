@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | FlavorCraft</title>
+
+    {% include 'common/common_css.html' %}
+
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate On Scroll (AOS) -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+    <style>
+        :root {
+            --primary-grad: linear-gradient(135deg, #e65c00 0%, #f9d423 100%);
+            --accent-grad: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --dark-bg: #0b0f19;
+            --glass-card: rgba(255, 255, 255, 0.95);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0f172a;
+            color: var(--text-main);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Mesh Background Gradient */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(230, 92, 0, 0.15), transparent 35%),
+                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.15), transparent 35%),
+                radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.1), transparent 45%),
+                linear-gradient(180deg, #0b0f19 0%, #1e293b 100%);
+        }
+
+        /* Profile Layout Container */
+        .profile-container {
+            max-width: 1100px;
+            margin: 80px auto 60px;
+            padding: 0 20px;
+        }
+
+        /* Main Glassmorphism Card */
+        .profile-card-master {
+            background: var(--glass-card);
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        /* Left Side Image Section */
+        .profile-left-hero {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            padding: 50px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            height: 100%;
+        }
+
+        .avatar-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .avatar-ring {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            padding: 6px;
+            background: var(--primary-grad);
+            box-shadow: 0 0 35px rgba(230, 92, 0, 0.4);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .avatar-container:hover .avatar-ring {
+            transform: scale(1.05) rotate(3deg);
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffffff;
+            background: #ffffff;
+        }
+
+        .badge-verified {
+            position: absolute;
+            bottom: 5px;
+            right: 15px;
+            background: #10b981;
+            color: #ffffff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #1e1b4b;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-tag-name {
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .user-role-badge {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f9d423;
+            border: 1px solid rgba(249, 212, 35, 0.3);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 30px;
+        }
+
+        /* Profile Quick Stats Counters */
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 25px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-box h4 {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .stat-box p {
+            color: #94a3b8;
+            font-size: 0.78rem;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Right Side Content Section */
+        .profile-right-content {
+            padding: 50px 45px;
+        }
+
+        /* Navigation Tab Pill Buttons */
+        .nav-pills-custom {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 35px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            padding: 8px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-grad);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(230, 92, 0, 0.25);
+        }
+
+        /* Info Item Cards */
+        .info-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .info-item-card:hover {
+            background: #ffffff;
+            border-color: #e65c00;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transform: translateY(-3px);
+        }
+
+        .info-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: var(--primary-grad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.2rem;
+            box-shadow: 0 6px 15px rgba(230, 92, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .info-details label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .info-details span {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+
+        /* Action Buttons Area */
+        .action-group {
+            margin-top: 35px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action-primary {
+            background: var(--primary-grad);
+            color: #ffffff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(230, 92, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-action-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(230, 92, 0, 0.45);
+            color: #ffffff;
+        }
+
+        .btn-action-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 2px solid #e2e8f0;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action-outline:hover {
+            border-color: #e65c00;
+            color: #e65c00;
+            background: rgba(230, 92, 0, 0.05);
+        }
+
+        .btn-feedback {
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28);
+            transition: all 0.3s ease;
+        }
+
+        .btn-feedback:hover {
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.38);
+        }
+
+        /* Modal Customization */
+        .modal-content-custom {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-header-custom {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 20px 25px;
+        }
+
+        .form-control-custom {
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            font-weight: 600;
+        }
+
+        .form-control-custom:focus {
+            border-color: #e65c00;
+            box-shadow: 0 0 0 3px rgba(230, 92, 0, 0.15);
+        }
+
+        @media (max-width: 991px) {
+            .profile-right-content { padding: 35px 25px; }
+            .profile-left-hero { padding: 40px 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Dynamic Mesh Background -->
+    <div class="bg-mesh"></div>
+
+    <!-- Django Messages Include -->
+    {% include 'common/message.html' %}
+
+    <div class="profile-container">
+        
+        <!-- Main Master Card -->
+        <div class="profile-card-master" data-aos="fade-up" data-aos-duration="1000">
+            <div class="row g-0">
+                
+                <!-- Left Sidebar Hero -->
+                <div class="col-lg-4">
+                    <div class="profile-left-hero">
+                        
+                        <!-- Avatar & Status -->
+                        <div class="avatar-container">
+                            <div class="avatar-ring">
+                                {% if user_key.profile_pic %}
+                                    <img src="{{ user_key.profile_pic.url }}" alt="User Profile" class="avatar-img">
+                                {% else %}
+                                    <img src="{% static 'images/divya mishra.jpeg' %}" alt="Default Profile" class="avatar-img">
+                                {% endif %}
+                            </div>
+                            <div class="badge-verified" title="Verified Member">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                        </div>
+
+                        <h3 class="user-tag-name">{{ user_key.name }}</h3>
+                        <span class="user-role-badge">
+                            <i class="fa-solid fa-star me-1"></i> Verified Creator
+                        </span>
+
+                        <!-- Quick Statistics Counter -->
+                        <div class="profile-stats">
+                            <div class="stat-box">
+                                <h4>{{ site_recipe_count }}</h4>
+                                <p>Recipes</p>
+                            </div>
+                            <div class="stat-box" style="border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1); padding: 0 15px;">
+                                <h4>{{ site_average_rating|floatformat:1 }} ★</h4>
+                                <p>Rating</p>
+                            </div>
+                            <div class="stat-box">
+                                <h4>{{ site_review_count }}</h4>
+                                <p>Reviews</p>
+                            </div>
+                            <div class="stat-box">
+                                <h4>{{ site_visitor_count }}</h4>
+                                <p>Visitors</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Right Profile Details -->
+                <div class="col-lg-8">
+                    <div class="profile-right-content">
+                        
+                        <!-- Tabs Filter Header -->
+                        <div class="nav-pills-custom">
+                            <button class="tab-btn active"><i class="fa-solid fa-id-card me-2"></i> Overview</button>
+                            <button class="tab-btn"><i class="fa-solid fa-shield-halved me-2"></i> Security</button>
+                        </div>
+
+                        <!-- Information Grid Cards -->
+                        <div class="info-card-grid">
+                            
+                            <!-- Full Name -->
+                            <div class="info-item-card" data-aos="fade-up" data-aos-delay="100">
+                                <div class="info-icon-wrapper">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                                <div class="info-details">
+                                    <label>Full Name</label>
+                                    <span>{{ user_key.name }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div class="info-item-card" data-aos="fade-up" data-aos-delay="150">
+                                <div class="info-icon-wrapper">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div class="info-details">
+                                    <label>Phone Number</label>
+                                    <span>{{ user_key.phone|default:"+91 9876543210" }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Email Address -->
+                            <div class="info-item-card" data-aos="fade-up" data-aos-delay="200" style="grid-column: span 1 / -1;">
+                                <div class="info-icon-wrapper">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div class="info-details">
+                                    <label>Email Address</label>
+                                    <span>{{ user_key.email|default:"divya.mishra@example.com" }}</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-group">
+                            <a href="{% url 'home_page' %}" class="btn-action-primary">
+                                <i class="fa-solid fa-house"></i> Home
+                            </a>
+                            <button type="button" class="btn-action-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit Profile
+                            </button>
+                            <button type="button" class="btn-action-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                <i class="fa-solid fa-key"></i> Change Password
+                            </button>
+                            <a href="/search_video/" class="btn-action-primary">
+                                <i class="fa-solid fa-video"></i> Search Recipe Videos
+                            </a>
+                            <a href="{% url 'advanced_search' %}" class="btn-action-primary">
+                                <i class="fa-solid fa-magnifying-glass"></i> Discover Everything
+                            </a>
+                            <a href="{% url 'budget_recipes' %}" class="btn-action-primary">
+                                <i class="fa-solid fa-wallet"></i> Budget Recipes
+                            </a>
+                            <a href="{% url 'shopping_list' %}" class="btn-action-primary">
+                                <i class="fa-solid fa-basket-shopping"></i> Shopping List
+                            </a>
+                            <a href="{% url 'user_orders' %}" class="btn-action-primary">
+                                <i class="fa-solid fa-box-open"></i> My Orders
+                            </a>
+                            <a href="/user_logout/" class="btn-action-outline">
+                                <i class="fa-solid fa-right-from-bracket"></i> Logout
+                            </a>
+                            <a href="/user_feedback/" class="btn-feedback">
+                                <i class="fa-solid fa-message"></i> Give Feedback
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-content-custom">
+                <div class="modal-header modal-header-custom">
+                    <h5 class="modal-title font-weight-bold" id="editProfileModalLabel">
+                        <i class="fa-solid fa-user-pen me-2"></i> Edit Profile
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/edit_profile_action/" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold text-muted small text-uppercase">Full Name</label>
+                            <input type="text" name="name" class="form-control form-control-custom" value="{{ user_key.name|default:'Divya Mishra' }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold text-muted small text-uppercase">Phone Number</label>
+                            <input type="text" name="phone" class="form-control form-control-custom" value="{{ user_key.phone|default:'+91 9876543210' }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold text-muted small text-uppercase">Email Address</label>
+                            <input type="email" name="email" class="form-control form-control-custom" value="{{ user_key.email|default:'divya.mishra@example.com' }}" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light p-3">
+                        <button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn-action-primary py-2 px-4">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-content-custom">
+                <div class="modal-header modal-header-custom">
+                    <h5 class="modal-title font-weight-bold" id="changePasswordModalLabel"><i class="fa-solid fa-key me-2"></i>Change Password</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'change_password' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body p-4">
+                        <input type="password" name="old_password" class="form-control form-control-custom mb-3" placeholder="Current password" required autocomplete="current-password">
+                        <input type="password" name="new_password" class="form-control form-control-custom mb-3" placeholder="New password (minimum 6 characters)" required minlength="6" autocomplete="new-password">
+                        <input type="password" name="confirm_password" class="form-control form-control-custom" placeholder="Confirm new password" required minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="modal-footer bg-light p-3"><button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn-action-primary py-2 px-4">Update Password</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    {% include 'common/footer.html' %}
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true });
+    </script>
+
+</body>
+</html>

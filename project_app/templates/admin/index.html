@@ -1,0 +1,464 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/flavorcraft_admin.css' %}?v=20260917">
+{% endblock %}
+
+{% block content %}
+<div class="fc-dashboard">
+
+    <div class="fc-bg-glow fc-glow-one"></div>
+    <div class="fc-bg-glow fc-glow-two"></div>
+    <div class="fc-bg-glow fc-glow-three"></div>
+
+    <section class="fc-welcome">
+        <div class="fc-welcome-content">
+            <div class="fc-admin-badge">
+                <span class="fc-status-dot"></span>
+                FlavorCraft Control Center
+            </div>
+
+            <p class="fc-eyebrow">ADMIN DASHBOARD</p>
+
+            <h1>
+                Good morning,
+                <span>{{ user.get_short_name|default:user.username }}</span>
+                <span class="fc-wave" aria-hidden="true">&#128075;</span>
+            </h1>
+
+            <p class="fc-subtitle">
+                Monitor your food community, creators, recipes and marketplace activity from one place.
+            </p>
+
+            <div class="fc-welcome-meta">
+                <span><i class="fa-solid fa-shield-halved"></i> Secure Admin Area</span>
+                <span><i class="fa-solid fa-circle-check"></i> System Active</span>
+            </div>
+        </div>
+
+        <div class="fc-welcome-actions">
+            <a class="fc-primary-action" href="{% url 'flavorcraft:project_app_recipevideo_add' %}">
+                <span class="fc-action-plus">&#43;</span>
+                <span>Add Recipe</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="fc-orbit orbit-one"></div>
+        <div class="fc-orbit orbit-two"></div>
+        <div class="fc-orbit-dot"></div>
+    </section>
+
+    <section class="fc-metric-grid" aria-label="Platform overview">
+        {% for metric in dashboard_metrics %}
+        <a class="fc-metric-card tone-{{ metric.tone }}" href="{{ metric.url }}">
+            <div class="fc-card-shine"></div>
+
+            <div class="fc-metric-top">
+                <span class="fc-metric-icon">
+                    <i class="fa-solid {{ metric.icon }}" aria-hidden="true"></i>
+                </span>
+
+                <span class="fc-metric-arrow">
+                    <i class="fa-solid fa-arrow-up-right"></i>
+                </span>
+            </div>
+
+            <span class="fc-metric-label">{{ metric.label }}</span>
+
+            <strong class="fc-metric-value">{{ metric.value }}</strong>
+
+            <span class="fc-metric-footer">
+                <span>Manage</span>
+                <span class="fc-mini-line"></span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </span>
+        </a>
+        {% endfor %}
+    </section>
+
+    <section class="fc-main-grid">
+
+        <div class="fc-panel fc-growth-panel">
+            <div class="fc-panel-heading">
+                <div>
+                    <div class="fc-section-label">
+                        <span class="fc-section-dot"></span>
+                        AUDIENCE
+                    </div>
+                    <h2>User growth</h2>
+                    <p>Community registration overview</p>
+                </div>
+
+                <div class="fc-period-box">
+                    <i class="fa-regular fa-calendar"></i>
+                    {{ dashboard_year }}
+                </div>
+            </div>
+
+            <div class="fc-chart-summary">
+                <div>
+                    <span>Total growth</span>
+                    <strong>{{ growth_values|last }}</strong>
+                </div>
+                <span class="fc-growth-badge">
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                    Growing
+                </span>
+            </div>
+
+            <div class="fc-chart-wrap">
+                <div class="fc-chart-glow"></div>
+                <svg id="growth-chart" class="fc-chart" viewBox="0 0 720 250" role="img" aria-label="User growth chart"></svg>
+            </div>
+
+            <div class="fc-chart-labels">
+                {% for label in growth_labels %}
+                <span>{{ label }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="fc-panel fc-activity-panel">
+            <div class="fc-panel-heading">
+                <div>
+                    <div class="fc-section-label">
+                        <span class="fc-section-dot live"></span>
+                        LIVE FEED
+                    </div>
+                    <h2>Recent activity</h2>
+                    <p>Latest actions across FlavorCraft</p>
+                </div>
+
+                <span class="fc-live-pill">
+                    <span></span>
+                    Live
+                </span>
+            </div>
+
+            <div class="fc-activity-list">
+                {% for activity in recent_activities %}
+                <div class="fc-activity-item">
+                    <span class="fc-activity-icon">
+                        <i class="fa-solid {{ activity.icon }}" aria-hidden="true"></i>
+                    </span>
+
+                    <div class="fc-activity-content">
+                        <strong>{{ activity.label }}</strong>
+                        <span>{{ activity.title }}</span>
+                    </div>
+
+                    <time>{{ activity.date|date:"d M" }}</time>
+                </div>
+                {% empty %}
+                <div class="fc-empty-state">
+                    <span><i class="fa-regular fa-clock"></i></span>
+                    <strong>No recent activity</strong>
+                    <p>New platform activity will appear here.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="fc-activity-footer">
+                <span>Activity updates automatically</span>
+                <i class="fa-solid fa-rotate"></i>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="fc-lower-grid">
+
+        <div class="fc-panel fc-stats-panel">
+            <div class="fc-panel-heading">
+                <div>
+                    <div class="fc-section-label">
+                        <span class="fc-section-dot orange"></span>
+                        CONTENT HEALTH
+                    </div>
+                    <h2>Content statistics</h2>
+                    <p>Overview of your platform content</p>
+                </div>
+
+                <span class="fc-heading-icon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </span>
+            </div>
+
+            <div class="fc-stat-list">
+                {% for stat in content_statistics %}
+                <div class="fc-stat-row">
+                    <div class="fc-stat-info">
+                        <span class="fc-stat-name">
+                            <i style="background: {{ stat.color }}"></i>
+                            {{ stat.label }}
+                        </span>
+                        <strong>{{ stat.value }}</strong>
+                    </div>
+
+                    <div class="fc-stat-track">
+                        <span
+                            class="fc-stat-progress"
+                            data-value="{{ stat.value }}"
+                            style="background: {{ stat.color }}">
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="fc-panel fc-actions-panel">
+            <div class="fc-panel-heading">
+                <div>
+                    <div class="fc-section-label">
+                        <span class="fc-section-dot purple"></span>
+                        SHORTCUTS
+                    </div>
+                    <h2>Quick actions</h2>
+                    <p>Manage the most important areas</p>
+                </div>
+
+                <span class="fc-heading-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </span>
+            </div>
+
+            <div class="fc-action-grid">
+
+                <a href="{% url 'flavorcraft:project_app_userdetail_changelist' %}" class="fc-shortcut shortcut-green">
+                    <span class="fc-shortcut-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </span>
+                    <span class="fc-shortcut-text">
+                        <strong>Manage users</strong>
+                        <small>View & control accounts</small>
+                    </span>
+                    <i class="fa-solid fa-arrow-up-right-from-square fc-shortcut-arrow"></i>
+                </a>
+
+                <a href="{% url 'flavorcraft:project_app_creatordetail_changelist' %}" class="fc-shortcut shortcut-orange">
+                    <span class="fc-shortcut-icon">
+                        <i class="fa-solid fa-user-chef"></i>
+                    </span>
+                    <span class="fc-shortcut-text">
+                        <strong>Review creators</strong>
+                        <small>Approve creator accounts</small>
+                    </span>
+                    <i class="fa-solid fa-arrow-up-right-from-square fc-shortcut-arrow"></i>
+                </a>
+
+                <a href="{% url 'flavorcraft:project_app_product_changelist' %}" class="fc-shortcut shortcut-purple">
+                    <span class="fc-shortcut-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </span>
+                    <span class="fc-shortcut-text">
+                        <strong>Manage products</strong>
+                        <small>Control marketplace items</small>
+                    </span>
+                    <i class="fa-solid fa-arrow-up-right-from-square fc-shortcut-arrow"></i>
+                </a>
+
+                <a href="{% url 'flavorcraft:project_app_contact_changelist' %}" class="fc-shortcut shortcut-blue">
+                    <span class="fc-shortcut-icon">
+                        <i class="fa-solid fa-inbox"></i>
+                    </span>
+                    <span class="fc-shortcut-text">
+                        <strong>Open enquiries</strong>
+                        <small>Check customer messages</small>
+                    </span>
+                    <i class="fa-solid fa-arrow-up-right-from-square fc-shortcut-arrow"></i>
+                </a>
+
+            </div>
+        </div>
+
+    </section>
+
+    <section class="fc-inbox-grid">
+        <div class="fc-panel fc-inbox-panel">
+            <div class="fc-panel-heading">
+                <div>
+                    <div class="fc-section-label"><span class="fc-section-dot orange"></span>USER VOICE</div>
+                    <h2>Latest feedback</h2>
+                    <p>Reviews submitted by your community</p>
+                </div>
+                <a class="fc-panel-link" href="{{ feedback_admin_url }}">View all <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+            <div class="fc-inbox-list">
+                {% for feedback in recent_feedback %}
+                <a class="fc-inbox-item" href="{{ feedback_admin_url }}">
+                    <span class="fc-inbox-avatar"><i class="fa-solid fa-star"></i></span>
+                    <span class="fc-inbox-copy"><strong>{{ feedback.name }}</strong><span>{{ feedback.review|truncatechars:88 }}</span></span>
+                    <span class="fc-rating">{{ feedback.rating }} <i class="fa-solid fa-star"></i></span>
+                </a>
+                {% empty %}<div class="fc-inbox-empty">No feedback submitted yet.</div>{% endfor %}
+            </div>
+        </div>
+
+        <div class="fc-panel fc-inbox-panel">
+            <div class="fc-panel-heading">
+                <div>
+                    <div class="fc-section-label"><span class="fc-section-dot"></span>INBOX</div>
+                    <h2>Contact enquiries</h2>
+                    <p>Questions from the contact page</p>
+                </div>
+                <a class="fc-panel-link" href="{{ contact_admin_url }}">View all <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+            <div class="fc-inbox-list">
+                {% for contact in recent_contacts %}
+                <a class="fc-inbox-item" href="{{ contact_admin_url }}">
+                    <span class="fc-inbox-avatar contact"><i class="fa-solid fa-message"></i></span>
+                    <span class="fc-inbox-copy"><strong>{{ contact.name }}</strong><span>{{ contact.question|truncatechars:88 }}</span></span>
+                    <time>{{ contact.date|date:"d M" }}</time>
+                </a>
+                {% empty %}<div class="fc-inbox-empty">No contact enquiries yet.</div>{% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="fc-bottom-strip">
+        <div>
+            <span class="fc-bottom-icon">
+                <i class="fa-solid fa-shield-heart"></i>
+            </span>
+            <div>
+                <strong>FlavorCraft is running smoothly</strong>
+                <span>Your admin control center is active and protected.</span>
+            </div>
+        </div>
+
+        <span class="fc-system-status">
+            <span></span>
+            All systems operational
+        </span>
+    </section>
+
+</div>
+
+{{ growth_values|json_script:"growth-data" }}
+
+<script>
+(function () {
+    const dataElement = document.getElementById("growth-data");
+    const chart = document.getElementById("growth-chart");
+
+    if (!dataElement || !chart) {
+        return;
+    }
+
+    const values = JSON.parse(dataElement.textContent || "[]").map(Number);
+
+    if (!values.length) {
+        chart.innerHTML = "";
+        return;
+    }
+
+    const width = 720;
+    const height = 250;
+    const padX = 18;
+    const padY = 28;
+    const max = Math.max(...values, 1);
+    const min = Math.min(...values, 0);
+
+    const range = Math.max(max - min, 1);
+
+    const pointsArray = values.map(function (value, index) {
+        const x = padX + (
+            index *
+            (width - padX * 2) /
+            Math.max(values.length - 1, 1)
+        );
+
+        const y = height - padY - (
+            ((value - min) / range) *
+            (height - padY * 2)
+        );
+
+        return { x: x, y: y };
+    });
+
+    const points = pointsArray
+        .map(function (point) {
+            return point.x + "," + point.y;
+        })
+        .join(" ");
+
+    const area = [
+        padX + "," + (height - padY),
+        points,
+        (width - padX) + "," + (height - padY)
+    ].join(" ");
+
+    const circles = pointsArray.map(function (point, index) {
+        return `
+            <circle
+                class="chart-point"
+                cx="${point.x}"
+                cy="${point.y}"
+                r="4"
+                style="animation-delay:${index * 0.08}s"
+            />
+        `;
+    }).join("");
+
+    chart.innerHTML = `
+        <defs>
+            <linearGradient id="chartAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" class="chart-gradient-top"/>
+                <stop offset="100%" class="chart-gradient-bottom"/>
+            </linearGradient>
+
+            <filter id="chartShadow" x="-20%" y="-20%" width="140%" height="160%">
+                <feDropShadow dx="0" dy="7" stdDeviation="8" flood-opacity="0.12"/>
+            </filter>
+        </defs>
+
+        <line class="chart-gridline" x1="${padX}" y1="${padY}" x2="${width - padX}" y2="${padY}"/>
+        <line class="chart-gridline" x1="${padX}" y1="${height / 2}" x2="${width - padX}" y2="${height / 2}"/>
+        <line class="chart-gridline" x1="${padX}" y1="${height - padY}" x2="${width - padX}" y2="${height - padY}"/>
+
+        <polygon
+            class="chart-area"
+            points="${area}"
+        />
+
+        <polyline
+            class="chart-line"
+            points="${points}"
+            filter="url(#chartShadow)"
+        />
+
+        ${circles}
+    `;
+
+    requestAnimationFrame(function () {
+        chart.classList.add("chart-ready");
+    });
+
+    const progressBars = document.querySelectorAll(".fc-stat-progress");
+
+    if (progressBars.length) {
+        let maximum = 0;
+
+        progressBars.forEach(function (bar) {
+            maximum = Math.max(
+                maximum,
+                Number(bar.dataset.value || 0)
+            );
+        });
+
+        progressBars.forEach(function (bar) {
+            const value = Number(bar.dataset.value || 0);
+            const percentage = maximum
+                ? Math.max(8, (value / maximum) * 100)
+                : 8;
+
+            bar.style.setProperty("--progress-width", percentage + "%");
+        });
+    }
+})();
+</script>
+{% endblock %}

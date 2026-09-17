@@ -1,0 +1,40 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Budget Recipes | FlavorCraft</title>
+    {% include 'common/common_css.html' %}
+    <link rel="stylesheet" href="{% static 'css/marketplace.css' %}">
+    <style>
+        .budget-form{display:flex;gap:10px;align-items:end;max-width:620px}.budget-form .mk-field{flex:1;margin:0}.budget-result{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:18px;padding:14px 16px;border:1px solid var(--mk-line);border-radius:10px;background:#f7fbf9}.budget-cost{color:var(--mk-green);font-size:17px;font-weight:800}.budget-meta{color:var(--mk-muted);font-size:12px}.budget-error{margin:14px 0 0;padding:11px 13px;border-radius:8px;background:#fff0f0;color:#b44c4c;font-size:13px;font-weight:700}.budget-card{display:flex;flex-direction:column}.budget-card .mk-btn{align-self:flex-start;margin-top:auto}.budget-card h3{margin-top:0}.budget-card p{min-height:46px}@media(max-width:600px){.budget-form{align-items:stretch;flex-direction:column}.budget-form .mk-field{width:100%}.budget-result{align-items:flex-start;flex-direction:column}}
+    </style>
+</head>
+<body>
+<div class="mk-page"><div class="mk-shell">
+    <section class="mk-hero"><div><span class="mk-kicker">Smart kitchen budget</span><h1>Recipes under ₹{{ budget|default:"your budget" }}</h1><p>Enter your budget and discover recipes with an approximate ingredient cost.</p></div><div class="mk-hero-mark"><i class="fa-solid fa-wallet"></i></div></section>
+    <section class="mk-card">
+        <form method="get" class="budget-form">
+            <div class="mk-field"><label class="mk-label" for="budget">I have ₹</label><input class="mk-input" id="budget" name="budget" type="number" min="1" step="1" value="{{ budget }}" placeholder="150" required></div>
+            <button class="mk-btn" type="submit"><i class="fa-solid fa-filter"></i> Find recipes</button>
+        </form>
+        {% if budget_error %}<p class="budget-error">{{ budget_error }}</p>{% endif %}
+    </section>
+    <div class="mk-section-title"><h2>{% if budget %}Recipes under ₹{{ budget }}{% else %}Budget-friendly recipes{% endif %}</h2></div>
+    <div class="mk-grid">
+        {% for recipe in recipes %}
+        <article class="mk-card budget-card">
+            <span class="mk-kicker">{{ recipe.recipe_category }}</span>
+            <h3>{{ recipe.name }}</h3>
+            <p>{{ recipe.description|truncatechars:130 }}</p>
+            <div class="budget-result"><span class="budget-cost">₹{{ recipe.estimated_cost }} approx.</span><span class="budget-meta">{{ recipe.cooking_time }} min · {{ recipe.creator.name }}</span></div>
+            <a class="mk-btn ghost" href="{% url 'recipe_calculator' recipe.id %}">View ingredients <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+        {% empty %}
+        <div class="mk-card mk-empty">No published recipes fit this budget yet. Try a higher amount.</div>
+        {% endfor %}
+    </div>
+</div></div>
+</body>
+</html>

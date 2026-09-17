@@ -1,0 +1,2449 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FlavorCraft | Homemade Food Marketplace</title>
+
+    {% include 'common/common_css.html' %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --green: #198754;
+            --green-dark: #0d5c38;
+            --green-light: #eaf7f0;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --dark: #17251e;
+            --text: #64716a;
+            --light: #f7faf8;
+            --white: #ffffff;
+            --border: rgba(25, 135, 84, 0.12);
+            --shadow: 0 20px 60px rgba(23, 37, 30, 0.10);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #ffffff;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .main {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .top-welcome-bar {
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(90deg, #0d5c38, #198754, #0d5c38);
+            background-size: 200% 100%;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: .3px;
+            animation: gradientMove 8s ease infinite;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .top-welcome-bar i {
+            color: #ffd166;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body > nav,
+        body > header,
+        .main + nav {
+            margin-top: 0 !important;
+        }
+
+        .hero-section {
+            position: relative;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 8% 15%, rgba(25, 135, 84, .12), transparent 28%),
+                radial-gradient(circle at 92% 18%, rgba(245, 158, 11, .12), transparent 25%),
+                linear-gradient(180deg, #ffffff 0%, #f7faf8 100%);
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            left: -220px;
+            top: 80px;
+            background: rgba(25, 135, 84, .09);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: blobFloat 7s ease-in-out infinite;
+        }
+
+        .hero-section::after {
+            content: "";
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            right: -170px;
+            bottom: 20px;
+            background: rgba(245, 158, 11, .10);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: blobFloat 9s ease-in-out infinite reverse;
+        }
+
+        @keyframes blobFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-25px) scale(1.08);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 17px;
+            border-radius: 50px;
+            background: rgba(25, 135, 84, .09);
+            border: 1px solid rgba(25, 135, 84, .16);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 23px;
+            animation: fadeUp .8s ease both;
+        }
+
+        .hero-badge i {
+            color: var(--orange);
+        }
+
+        .hero-title {
+            font-size: clamp(43px, 5.2vw, 72px);
+            line-height: 1.08;
+            letter-spacing: -2.5px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 25px;
+            animation: fadeUp .9s ease .1s both;
+        }
+
+        .hero-title .green {
+            color: var(--green);
+        }
+
+        .hero-title .orange {
+            color: var(--orange);
+        }
+
+        .hero-description {
+            max-width: 650px;
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--text);
+            margin-bottom: 32px;
+            animation: fadeUp .9s ease .2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 13px;
+            flex-wrap: wrap;
+            animation: fadeUp .9s ease .3s both;
+        }
+
+        .hero-btn {
+            padding: 14px 24px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all .3s ease;
+        }
+
+        .hero-primary {
+            background: var(--green);
+            color: white;
+            border: 1px solid var(--green);
+            box-shadow: 0 12px 28px rgba(25, 135, 84, .23);
+        }
+
+        .hero-primary:hover {
+            background: var(--green-dark);
+            border-color: var(--green-dark);
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 18px 35px rgba(25, 135, 84, .28);
+        }
+
+        .hero-secondary {
+            background: white;
+            color: var(--dark);
+            border: 1px solid rgba(23, 37, 30, .10);
+            box-shadow: 0 10px 25px rgba(23, 37, 30, .06);
+        }
+
+        .hero-secondary:hover {
+            color: var(--green);
+            transform: translateY(-4px);
+            border-color: rgba(25, 135, 84, .25);
+        }
+
+        .hero-trust {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-top: 32px;
+            animation: fadeUp .9s ease .4s both;
+        }
+
+        .avatars {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 39px;
+            height: 39px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            margin-left: -9px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .avatar:first-child {
+            margin-left: 0;
+        }
+
+        .trust-copy {
+            font-size: 11px;
+            color: #78847e;
+            line-height: 1.5;
+        }
+
+        .trust-copy strong {
+            display: block;
+            color: var(--dark);
+            font-size: 12px;
+        }
+
+        .hero-visual {
+            position: relative;
+            z-index: 2;
+            animation: imageReveal 1s ease .2s both;
+        }
+
+        @keyframes imageReveal {
+            from {
+                opacity: 0;
+                transform: translateX(45px) scale(.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .hero-image-wrap {
+            position: relative;
+            max-width: 420px;
+            margin: auto;
+        }
+
+        .hero-image-wrap::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 32px;
+            border: 3px solid rgba(25, 135, 84, .20);
+            transform: rotate(4deg);
+            z-index: -1;
+            transition: .5s ease;
+        }
+
+        .hero-image-wrap:hover::before {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: 30px;
+            box-shadow: 0 30px 70px rgba(23, 37, 30, .18);
+        }
+
+        .floating-card {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 13px 17px;
+            background: rgba(255,255,255,.94);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,.8);
+            border-radius: 17px;
+            box-shadow: 0 18px 45px rgba(23,37,30,.14);
+            animation: floatingCard 4s ease-in-out infinite;
+        }
+
+        .floating-card i {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .floating-card strong {
+            display: block;
+            color: var(--dark);
+            font-size: 12px;
+        }
+
+        .floating-card span {
+            display: block;
+            color: #87918c;
+            font-size: 10px;
+        }
+
+        .floating-one {
+            left: -35px;
+            bottom: 55px;
+        }
+
+        .floating-two {
+            right: -25px;
+            top: 50px;
+            animation-delay: 1.2s;
+        }
+
+        @keyframes floatingCard {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .section {
+            padding: 58px 0;
+        }
+
+        .light-section {
+            background: var(--light);
+        }
+
+        .section-heading {
+            max-width: 720px;
+            margin: 0 auto 42px;
+            text-align: center;
+        }
+
+        .section-label {
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(30px, 4vw, 45px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 14px;
+        }
+
+        .section-heading p {
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .ai-section {
+            background: #f7faf8;
+        }
+
+        .ai-assistant-shell {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 1px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #198754, #f59e0b);
+            box-shadow: 0 24px 60px rgba(23, 37, 30, .13);
+        }
+
+        .ai-panel {
+            padding: 28px;
+            border-radius: 27px;
+            background: #ffffff;
+        }
+
+        .ai-header,
+        .suggestion-topbar,
+        .creator-top,
+        .creator-footer,
+        .trust-score-block,
+        .trending-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .ai-kicker,
+        .story-label {
+            display: block;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .ai-header h3 {
+            margin: 5px 0 0;
+            color: var(--dark);
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .ai-pill,
+        .score-pill,
+        .trending-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            color: var(--green-dark);
+            background: var(--green-light);
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .ingredient-pills,
+        .taste-grid,
+        .story-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ingredient-pills {
+            margin: 25px 0;
+        }
+
+        .ingredient-tag,
+        .taste-chip {
+            border: 1px solid rgba(25, 135, 84, .16);
+            border-radius: 999px;
+            padding: 9px 15px;
+            color: #53625a;
+            background: #ffffff;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+
+        .ingredient-tag:hover,
+        .ingredient-tag.active,
+        .taste-chip:hover,
+        .taste-chip.active {
+            color: #ffffff;
+            background: var(--green);
+            border-color: var(--green);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(25, 135, 84, .18);
+        }
+
+        .recipe-suggestion-card {
+            padding: 20px;
+            border: 1px solid rgba(25, 135, 84, .12);
+            border-radius: 20px;
+            background: linear-gradient(135deg, #fbfffc, #f3faf5);
+        }
+
+        .recipe-tag {
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .recipe-suggestion-card h4 {
+            margin: 18px 0 10px;
+            color: var(--dark);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .meta-row,
+        .trending-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            color: #75827b;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .meta-row i,
+        .trending-meta i,
+        .creator-stats i {
+            color: var(--orange);
+            margin-right: 4px;
+        }
+
+        .missing-box {
+            margin: 18px 0;
+            padding: 13px 16px;
+            border-left: 3px solid var(--orange);
+            border-radius: 8px;
+            background: #fff9ed;
+            color: #7b6432;
+            font-size: 12px;
+        }
+
+        .missing-box strong { color: #9a6800; }
+        .missing-box p { margin: 4px 0 0; }
+
+        .recipe-suggestion-card ol {
+            margin: 0;
+            padding-left: 20px;
+            color: #53625a;
+            font-size: 13px;
+            line-height: 1.85;
+        }
+
+        .city-filter {
+            max-width: 620px;
+            margin: 0 auto 34px;
+            padding: 18px;
+            border: 1px solid rgba(25, 135, 84, .10);
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(23, 37, 30, .05);
+        }
+
+        .city-filter label {
+            display: block;
+            margin-bottom: 9px;
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .city-filter-row { display: flex; gap: 10px; }
+
+        .city-filter select {
+            min-width: 0;
+            flex: 1;
+            padding: 11px 13px;
+            border: 1px solid #dce7df;
+            border-radius: 10px;
+            color: var(--dark);
+            background: #fbfdfb;
+            font: inherit;
+            font-size: 13px;
+        }
+
+        .city-filter button,
+        .whatsapp-btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 11px 18px;
+            color: #ffffff;
+            background: var(--green);
+            font: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            transition: .25s ease;
+        }
+
+        .city-filter button:hover,
+        .whatsapp-btn:hover {
+            color: #ffffff;
+            background: var(--green-dark);
+            transform: translateY(-2px);
+        }
+
+        .creator-card,
+        .pick-card,
+        .trending-card {
+            height: 100%;
+            border: 1px solid rgba(25, 135, 84, .10);
+            border-radius: 20px;
+            background: #ffffff;
+            box-shadow: 0 12px 35px rgba(23, 37, 30, .07);
+            transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+        }
+
+        .creator-card:hover,
+        .pick-card:hover,
+        .trending-card:hover {
+            border-color: rgba(25, 135, 84, .25);
+            transform: translateY(-7px);
+            box-shadow: 0 20px 45px rgba(23, 37, 30, .12);
+        }
+
+        .creator-card { padding: 22px; }
+
+        .creator-avatar {
+            width: 58px;
+            height: 58px;
+            flex: 0 0 58px;
+            padding: 3px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), var(--orange));
+        }
+
+        .creator-avatar img {
+            width: 100%;
+            height: 100%;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .creator-meta { min-width: 0; flex: 1; }
+        .creator-meta h4 { margin: 0 0 4px; color: var(--dark); font-size: 16px; font-weight: 800; }
+        .creator-meta span, .creator-story, .pick-card p, .pick-card > span, .trending-body p { color: var(--text); font-size: 12px; line-height: 1.7; }
+        .creator-stats { display: flex; gap: 18px; margin: 20px 0 12px; color: #76847b; font-size: 11px; font-weight: 700; }
+        .creator-story { min-height: 42px; margin-bottom: 20px; }
+        .creator-footer { padding-top: 15px; border-top: 1px solid #edf2ee; }
+        .availability { color: var(--green); font-size: 11px; font-weight: 700; }
+        .availability i { margin-right: 5px; font-size: 8px; }
+        .whatsapp-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 11px; text-decoration: none; font-size: 11px; }
+
+        .empty-creator-box { padding: 30px; border: 1px dashed #cbdccf; border-radius: 16px; color: var(--text); text-align: center; background: rgba(255,255,255,.65); }
+        .empty-creator-box i { display: block; margin-bottom: 9px; color: var(--green); font-size: 25px; }
+        .empty-creator-box p { margin: 0; font-size: 13px; }
+
+        .trust-section { background: #ffffff; }
+        .trust-card { max-width: 1050px; margin: 0 auto; padding: 30px; border-radius: 24px; color: #ffffff; background: linear-gradient(135deg, #0d5c38, #198754); box-shadow: 0 22px 55px rgba(25, 135, 84, .22); }
+        .trust-score-block { justify-content: flex-start; }
+        .score-ring { display: grid; place-items: center; width: 128px; height: 128px; flex: 0 0 128px; border-radius: 50%; background: conic-gradient(#ffd166 0 94%, rgba(255,255,255,.18) 94%); }
+        .score-ring-inner { display: grid; place-items: center; width: 100px; height: 100px; border-radius: 50%; background: #126b42; }
+        .score-ring strong { font-size: 34px; line-height: 1; }
+        .score-ring span { font-size: 11px; opacity: .75; }
+        .score-copy .score-label { margin: 0 0 4px; color: #ffd166; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .score-copy h3 { margin: 0 0 6px; font-size: 24px; font-weight: 800; }
+        .score-copy > span { color: rgba(255,255,255,.78); font-size: 12px; }
+        .trust-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.18); }
+        .metric-item { padding: 13px; border-radius: 12px; background: rgba(255,255,255,.08); }
+        .metric-item span { display: block; color: rgba(255,255,255,.68); font-size: 10px; }
+        .metric-item strong { display: block; margin-top: 4px; font-size: 17px; }
+
+        .pick-card { position: relative; padding: 0 20px 22px; overflow: hidden; }
+        .pick-card::after { content: ""; position: absolute; right: -35px; bottom: -45px; width: 120px; height: 120px; border-radius: 50%; background: rgba(25,135,84,.07); }
+        .pick-image { display: block; width: calc(100% + 40px); height: 130px; margin: 0 -20px 18px; object-fit: cover; }
+        .pick-badge { display: inline-block; padding: 6px 9px; border-radius: 999px; color: #987000; background: #fff6d9; font-size: 10px; font-weight: 700; }
+        .pick-icon { display: grid; place-items: center; width: 52px; height: 52px; margin: 20px 0 16px; border-radius: 15px; color: var(--green); background: var(--green-light); font-size: 21px; }
+        .pick-card h4 { margin: 0 0 6px; color: var(--dark); font-size: 16px; font-weight: 800; }
+        .pick-card p { margin: 0 0 4px; font-weight: 700; }
+        .pick-card > span { font-size: 11px; }
+        .pick-description { display: block; position: relative; z-index: 1; margin-top: 10px; color: var(--text); font-size: 11px; line-height: 1.6; }
+
+        .trending-section { background: #ffffff; }
+        .trending-card { overflow: hidden; }
+        .trending-top { padding: 15px 18px 0; }
+        .trending-rank { color: var(--orange); font-size: 18px; font-weight: 800; }
+        .trending-thumb { height: 125px; margin-top: 13px; overflow: hidden; background: #eaf2ec; }
+        .trending-thumb img, .trending-thumb video { width: 100%; height: 100%; object-fit: cover; }
+        .trending-body { padding: 14px 18px 17px; }
+        .trending-body h4 { margin: 0 0 7px; color: var(--dark); font-size: 15px; font-weight: 800; }
+        .trending-body p { min-height: 34px; margin: 8px 0 0; font-size: 11px; }
+
+        .taste-section { background: linear-gradient(180deg, #f7faf8, #ffffff); }
+        .taste-grid { justify-content: center; max-width: 760px; margin: 0 auto; }
+        .taste-chip { display: inline-flex; align-items: center; gap: 8px; padding: 13px 18px; }
+        .taste-chip i { color: var(--orange); }
+
+        .story-section { overflow: hidden; }
+        .story-card { padding: 36px; border-radius: 24px; background: #ffffff; box-shadow: 0 18px 45px rgba(23,37,30,.08); }
+        .story-card h3 { margin: 8px 0 18px; color: var(--dark); font-size: 31px; font-weight: 800; }
+        .story-card blockquote { margin: 0 0 22px; color: #53625a; font-size: 16px; line-height: 1.8; font-style: italic; }
+        .story-badges span { padding: 7px 10px; border-radius: 999px; color: var(--green-dark); background: var(--green-light); font-size: 10px; font-weight: 700; }
+        .story-card ul { margin: 22px 0 0; padding-left: 18px; color: var(--text); font-size: 13px; line-height: 2; }
+        .story-visual { height: 390px; overflow: hidden; border-radius: 24px; box-shadow: var(--shadow); }
+        .story-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+        .story-visual:hover img { transform: scale(1.05); }
+
+        .feature-card {
+            height: 100%;
+            padding: 35px 30px;
+            background: white;
+            border: 1px solid rgba(25,135,84,.07);
+            border-radius: 23px;
+            box-shadow: 0 12px 40px rgba(23,37,30,.055);
+            transition: .4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::after {
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: rgba(25,135,84,.045);
+            top: -65px;
+            right: -65px;
+            transition: .4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+            border-color: rgba(25,135,84,.18);
+        }
+
+        .feature-card:hover::after {
+            transform: scale(1.5);
+        }
+
+        .feature-icon {
+            width: 67px;
+            height: 67px;
+            display: grid;
+            place-items: center;
+            border-radius: 18px;
+            margin-bottom: 23px;
+            font-size: 23px;
+            transition: .35s ease;
+        }
+
+        .green-icon {
+            color: var(--green);
+            background: rgba(25,135,84,.10);
+        }
+
+        .orange-icon {
+            color: #d88900;
+            background: rgba(245,158,11,.12);
+        }
+
+        .red-icon {
+            color: var(--red);
+            background: rgba(239,68,68,.10);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: translateY(-4px) rotate(4deg);
+        }
+
+        .feature-card h4 {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text);
+            font-size: 13px;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .about-image-wrap {
+            position: relative;
+            max-width: 460px;
+            margin: 0 auto;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 360px;
+            object-fit: cover;
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .about-badge {
+            position: absolute;
+            right: -20px;
+            bottom: 30px;
+            background: white;
+            padding: 17px 22px;
+            border-radius: 17px;
+            box-shadow: 0 18px 40px rgba(23,37,30,.14);
+        }
+
+        .about-badge strong {
+            display: block;
+            color: var(--green);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .about-badge span {
+            color: #7d8983;
+            font-size: 10px;
+        }
+
+        .about-content {
+            padding-left: 10px;
+        }
+
+        .about-content h2 {
+            font-size: clamp(31px, 4vw, 46px);
+            line-height: 1.15;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .about-content > p {
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.9;
+            margin-bottom: 25px;
+        }
+
+        .about-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .about-list li {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 13px;
+            color: #56645d;
+            font-size: 13px;
+        }
+
+        .about-list i {
+            width: 27px;
+            height: 27px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(25,135,84,.10);
+            color: var(--green);
+            font-size: 10px;
+        }
+
+        .category-card {
+            position: relative;
+            height: 255px;
+            border-radius: 23px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(23,37,30,.10);
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: .6s ease;
+        }
+
+        .category-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                transparent 20%,
+                rgba(0,0,0,.76) 100%
+            );
+        }
+
+        .category-card:hover img {
+            transform: scale(1.10);
+        }
+
+        .category-info {
+            position: absolute;
+            left: 21px;
+            right: 21px;
+            bottom: 19px;
+            z-index: 2;
+            color: white;
+        }
+
+        .category-info h5 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .category-info span {
+            font-size: 10px;
+            opacity: .8;
+        }
+
+        .product-card-home {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            border: 1px solid rgba(25,135,84,.08);
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow: 0 12px 35px rgba(23,37,30,.07);
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        .product-card-home-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 16px;
+            padding-top: 13px;
+            border-top: 1px solid #edf2ef;
+        }
+
+        .product-creator-home {
+            overflow: hidden;
+            color: #6d7d7d;
+            font-size: 10px;
+            font-weight: 700;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .product-creator-home i { color: #198754; }
+
+        .product-cart-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 34px;
+            padding: 0 11px;
+            border: 0;
+            border-radius: 7px;
+            background: linear-gradient(135deg, #147849, #29a971);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 7px 14px rgba(25,135,84,.18);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .product-cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 11px 20px rgba(25,135,84,.28);
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+        .product-card-home:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 42px rgba(23,37,30,.13);
+        }
+
+        .product-card-home img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            transition: transform .45s ease;
+        }
+
+        .product-card-home:hover img { transform: scale(1.04); }
+
+        .product-image-home-wrap {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image-home-wrap::after {
+            position: absolute;
+            inset: auto 0 0;
+            height: 45%;
+            background: linear-gradient(transparent, rgba(12,35,26,.26));
+            content: '';
+            pointer-events: none;
+        }
+
+        .product-badge-home {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 1;
+            padding: 6px 9px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.92);
+            color: #16764b;
+            font-size: 10px;
+            font-weight: 800;
+            box-shadow: 0 6px 14px rgba(22,118,75,.15);
+        }
+
+        .product-card-home-body {
+            padding: 18px;
+        }
+
+        .product-card-home h5 {
+            margin: 0 0 8px;
+            color: var(--dark);
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .product-card-home h5 a { color: inherit; text-decoration: none; }
+        .product-card-home h5 a:hover { color: var(--green); }
+
+        .product-meta-home {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 9px;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .product-card-home p {
+            display: -webkit-box;
+            overflow: hidden;
+            margin: 0;
+            color: var(--text);
+            font-size: 12px;
+            line-height: 1.6;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        .steps-section {
+            background:
+                radial-gradient(circle at 10% 80%, rgba(25,135,84,.07), transparent 25%),
+                #ffffff;
+        }
+
+        .step-card {
+            position: relative;
+            height: 100%;
+            text-align: center;
+            padding: 25px 18px;
+            border-radius: 22px;
+            border: 1px solid rgba(25,135,84,.07);
+            transition: .35s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 15px 40px rgba(23,37,30,.08);
+            background: white;
+        }
+
+        .step-number {
+            position: absolute;
+            top: 8px;
+            right: 16px;
+            color: rgba(25,135,84,.07);
+            font-size: 43px;
+            font-weight: 800;
+        }
+
+        .step-icon {
+            width: 76px;
+            height: 76px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 20px;
+            border-radius: 22px;
+            background: white;
+            border: 1px solid rgba(25,135,84,.08);
+            color: var(--green);
+            font-size: 25px;
+            box-shadow: 0 12px 30px rgba(23,37,30,.08);
+            transition: .35s ease;
+        }
+
+        .step-card:hover .step-icon {
+            background: var(--green);
+            color: white;
+            transform: rotate(4deg) translateY(-4px);
+        }
+
+        .step-card h5 {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 9px;
+        }
+
+        .step-card p {
+            color: var(--text);
+            font-size: 12px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .marketplace-section {
+            padding: 30px 0;
+        }
+
+        .marketplace-box {
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            padding: 55px;
+            color: white;
+            background:
+                radial-gradient(circle at 90% 10%, rgba(245,158,11,.18), transparent 25%),
+                linear-gradient(135deg, #0d5132, #198754);
+            box-shadow: 0 25px 65px rgba(25,135,84,.20);
+        }
+
+        .marketplace-box::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.055);
+            right: -90px;
+            top: -110px;
+        }
+
+        .marketplace-box::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(245,158,11,.12);
+            left: -90px;
+            bottom: -110px;
+        }
+
+        .marketplace-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .marketplace-content h2 {
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 12px;
+        }
+
+        .marketplace-content p {
+            max-width: 680px;
+            font-size: 14px;
+            line-height: 1.8;
+            opacity: .82;
+            margin: 0;
+        }
+
+        .cta-section {
+            padding: 105px 0;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(25,135,84,.09), transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(245,158,11,.09), transparent 25%),
+                #f7faf8;
+        }
+
+        .cta-box {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .cta-box h2 {
+            font-size: clamp(31px, 4vw, 48px);
+            line-height: 1.15;
+            font-weight: 800;
+            margin-bottom: 17px;
+        }
+
+        .cta-box p {
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .scroll-top {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 14px;
+            background: var(--green);
+            color: white;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 12px 30px rgba(25,135,84,.25);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: .3s ease;
+            z-index: 9999;
+        }
+
+        .scroll-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            background: var(--green-dark);
+            transform: translateY(-4px);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 991px) {
+            .hero-section {
+                min-height: auto;
+                padding: 75px 0 85px;
+            }
+
+            .hero-visual {
+                margin-top: 30px;
+            }
+
+            .about-content {
+                padding-left: 0;
+                margin-top: 30px;
+            }
+
+            .about-badge {
+                right: 15px;
+            }
+
+            .marketplace-box {
+                padding: 40px 30px;
+            }
+
+            .trust-card {
+                padding: 25px;
+            }
+
+            .story-visual {
+                height: 330px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .top-welcome-bar {
+                padding: 8px 15px;
+                text-align: center;
+            }
+
+            .section {
+                padding: 46px 0;
+            }
+
+            .hero-section {
+                padding: 55px 0 70px;
+            }
+
+            .ai-panel {
+                padding: 22px 16px;
+            }
+
+            .ai-header,
+            .suggestion-topbar,
+            .trust-score-block {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .ai-pill {
+                align-self: flex-start;
+            }
+
+            .recipe-suggestion-card {
+                padding: 18px;
+            }
+
+            .city-filter-row {
+                flex-direction: column;
+            }
+
+            .city-filter button {
+                width: 100%;
+            }
+
+            .trust-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .score-ring {
+                width: 108px;
+                height: 108px;
+                flex-basis: 108px;
+            }
+
+            .score-ring-inner {
+                width: 84px;
+                height: 84px;
+            }
+
+            .story-card {
+                padding: 26px 22px;
+            }
+
+            .hero-title {
+                font-size: 42px;
+                letter-spacing: -1.5px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+                line-height: 1.8;
+            }
+
+            .hero-image {
+                height: 410px;
+            }
+
+            .floating-one {
+                left: 5px;
+                bottom: 25px;
+            }
+
+            .floating-two {
+                right: 5px;
+                top: 25px;
+            }
+
+            .section {
+                padding: 62px 0;
+            }
+
+            .about-image {
+                height: 320px;
+            }
+
+            .category-card {
+                height: 230px;
+            }
+
+            .marketplace-box {
+                border-radius: 23px;
+                padding: 35px 24px;
+            }
+
+            .cta-section {
+                padding: 75px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .hero-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-image {
+                height: 340px;
+            }
+
+            .floating-card {
+                padding: 10px 12px;
+            }
+
+            .floating-card i {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            .floating-card span {
+                display: none;
+            }
+
+            .about-image {
+                height: 280px;
+            }
+
+            .trust-card {
+                padding: 20px 16px;
+            }
+
+            .metric-item {
+                padding: 11px 9px;
+            }
+
+            .metric-item strong {
+                font-size: 15px;
+            }
+
+            .story-card h3 {
+                font-size: 26px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="home-page">
+
+    <div class="top-welcome-bar">
+        <span>
+            <i class="fa-solid fa-wand-magic-sparkles me-2"></i>
+            Welcome to FlavorCraft — Empowering Home Chefs Everywhere
+        </span>
+    </div>
+
+    {% include 'common/header.html' %}
+
+    <main class="main">
+
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center g-5">
+
+                    <div class="col-lg-6">
+                        <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+
+                            <div class="hero-badge">
+                                <i class="fa-solid fa-utensils"></i>
+                                Homemade Food Marketplace
+                            </div>
+
+                            <h1 class="hero-title">
+                                Discover.
+                                <span class="green">Share.</span>
+                                <span class="orange">Taste.</span>
+                                <br>
+                                <span>with FlavorCraft.</span>
+                            </h1>
+
+                            <p class="hero-description">
+                                Connect with passionate home chefs, discover authentic
+                                recipes, watch cooking videos and explore delicious
+                                homemade products — all in one place.
+                            </p>
+
+                            <div class="hero-buttons">
+
+                                <a href="{% url 'user_registration page' %}" class="btn hero-btn hero-primary">
+                                    <i class="fa-solid fa-user-plus me-2"></i>
+                                    Create Account
+                                </a>
+
+                                <a href="#features" class="btn hero-btn hero-secondary">
+                                    Explore Features
+                                    <i class="fa-solid fa-arrow-down ms-2"></i>
+                                </a>
+
+                            </div>
+
+                            <div class="hero-trust">
+
+                                <div class="avatars">
+                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" class="avatar" alt="User">
+                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" class="avatar" alt="User">
+                                    <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=100&q=80" class="avatar" alt="User">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" class="avatar" alt="User">
+                                </div>
+
+                                <div class="trust-copy">
+                                    <strong>Built for food lovers</strong>
+                                    Recipes • Products • Community
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="hero-visual" data-aos="fade-left" data-aos-duration="1000">
+
+                            <div class="hero-image-wrap">
+
+                                <img
+                                    src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=85"
+                                    class="hero-image"
+                                    alt="Homemade Food">
+
+                                <div class="floating-card floating-one">
+                                    <i class="fa-solid fa-bowl-food"></i>
+                                    <div>
+                                        <strong>Fresh & Homemade</strong>
+                                        <span>Made with love</span>
+                                    </div>
+                                </div>
+
+                                <div class="floating-card floating-two">
+                                    <i class="fa-solid fa-heart"></i>
+                                    <div>
+                                        <strong>Home Chef</strong>
+                                        <span>Authentic flavours</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <section class="section ai-section" id="ai-assistant">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <div class="section-label">AI Recipe Assistant</div>
+                    <h2>What can I cook with what I have?</h2>
+                    <p>Pick your available ingredients and let FlavorCraft suggest a personalized recipe idea.</p>
+                </div>
+
+                <div class="ai-assistant-shell" data-aos="zoom-in-up">
+                    <div class="ai-panel">
+                        <div class="ai-header">
+                            <div>
+                                <span class="ai-kicker">FlavorCraft AI</span>
+                                <h3>Smart Pantry Match</h3>
+                            </div>
+                            <span class="ai-pill"><i class="fa-solid fa-wand-magic-sparkles"></i> Live Suggestion</span>
+                        </div>
+
+                        <div class="ingredient-pills" id="ingredientPills">
+                            <button type="button" class="ingredient-tag active">Tomato</button>
+                            <button type="button" class="ingredient-tag active">Potato</button>
+                            <button type="button" class="ingredient-tag active">Onion</button>
+                            <button type="button" class="ingredient-tag active">Paneer</button>
+                            <button type="button" class="ingredient-tag">Garlic</button>
+                            <button type="button" class="ingredient-tag">Rice</button>
+                            <button type="button" class="ingredient-tag">Coconut</button>
+                            <button type="button" class="ingredient-tag">Spinach</button>
+                            <button type="button" class="ingredient-tag">Lemon</button>
+                            <button type="button" class="ingredient-tag">Chickpeas</button>
+                        </div>
+
+                        <div class="ai-output" id="aiOutput">
+                            <div class="recipe-suggestion-card">
+                                <div class="suggestion-topbar">
+                                    <span class="recipe-tag">Paneer Aloo Masala</span>
+                                    <span class="score-pill">AI Match 94%</span>
+                                </div>
+                                <h4>Paneer & Potato Curry</h4>
+                                <div class="meta-row">
+                                    <span><i class="fa-solid fa-clock"></i> 30 mins</span>
+                                    <span><i class="fa-solid fa-star"></i> Easy</span>
+                                </div>
+                                <div class="missing-box">
+                                    <strong>Missing ingredients:</strong>
+                                    <p>Turmeric, cumin, garam masala, coriander leaves</p>
+                                </div>
+                                <ol>
+                                    <li>Heat oil and temper onion, garlic, and cumin.</li>
+                                    <li>Add tomatoes, potato cubes, and spice powders.</li>
+                                    <li>Cook until soft, then add paneer and simmer.</li>
+                                    <li>Finish with fresh coriander and serve hot.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section light-section local-discovery" id="local-discovery">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <div class="section-label">Local Food Discovery</div>
+                    <h2>Homemade food creators near you</h2>
+                    <p>Find talented local cooks and home chefs by city.</p>
+                </div>
+
+                <form class="city-filter" method="get" action="/" data-aos="fade-up">
+                    <label for="citySelect">Choose your city</label>
+                    <div class="city-filter-row">
+                        <select id="citySelect" name="city">
+                            <option value="">All Cities</option>
+                            <option value="Delhi" {% if selected_city == 'Delhi' %}selected{% endif %}>Delhi</option>
+                            <option value="Mumbai" {% if selected_city == 'Mumbai' %}selected{% endif %}>Mumbai</option>
+                            <option value="Lucknow" {% if selected_city == 'Lucknow' %}selected{% endif %}>Lucknow</option>
+                            <option value="Vanaras" {% if selected_city == 'Vanaras' %}selected{% endif %}>Vanaras</option>
+                        </select>
+                        <button type="submit">Discover</button>
+                    </div>
+                </form>
+
+                <div class="row g-4" data-aos="fade-up" data-aos-delay="100">
+                    {% if creators %}
+                        {% for creator in creators %}
+                        <div class="col-lg-4 col-md-6">
+                            <article class="creator-card">
+                                <div class="creator-top">
+                                    <div class="creator-avatar">
+                                        {% if creator.profile_pic %}
+                                            <img src="{{ creator.profile_pic.url }}" alt="{{ creator.name }}">
+                                        {% else %}
+                                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80" alt="{{ creator.name }}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="creator-meta">
+                                        <h4>{{ creator.name }}</h4>
+                                        <span><i class="fa-solid fa-location-dot"></i> {{ creator.city|default:'Local City' }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="creator-stats">
+                                    <span><i class="fa-solid fa-star"></i> 4.8</span>
+                                    <span><i class="fa-solid fa-plate-wheat"></i> {{ creator.speciality|default:'Homemade food' }}</span>
+                                </div>
+
+                                <p class="creator-story">
+                                    {% if creator.about_me %}
+                                        {{ creator.about_me|truncatechars:120 }}
+                                    {% else %}
+                                        Homemade food specialist bringing authentic family recipes to the community.
+                                    {% endif %}
+                                </p>
+
+                                <div class="creator-footer">
+                                    <span class="availability"><i class="fa-solid fa-circle"></i> Available</span>
+                                    <a href="https://wa.me/91{{ creator.phone }}" target="_blank" class="whatsapp-btn">
+                                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                                    </a>
+                                </div>
+                            </article>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12">
+                            <div class="empty-creator-box">
+                                <i class="fa-solid fa-location-crosshairs"></i>
+                                <p>No creators found for this city yet. Try another city.</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="section trust-section" id="trust-score">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <div class="section-label">Creator Trust Score</div>
+                    <h2>Verified home chefs you can trust</h2>
+                    <p>Each creator gets a smart quality score based on activity and trust signals.</p>
+                </div>
+
+                <div class="trust-card" data-aos="zoom-in">
+                    <div class="trust-score-block">
+                        <div class="score-ring">
+                            <div class="score-ring-inner">
+                                <strong>94</strong>
+                                <span>/100</span>
+                            </div>
+                        </div>
+                        <div class="score-copy">
+                            <p class="score-label">FlavorCraft Trust Score</p>
+                            <h3>Elite Home Chef</h3>
+                            <span>Verified • High response rate • Community favourite</span>
+                        </div>
+                    </div>
+
+                    <div class="trust-metrics">
+                        <div class="metric-item">
+                            <span>Reviews</span>
+                            <strong>4.8/5</strong>
+                        </div>
+                        <div class="metric-item">
+                            <span>Response rate</span>
+                            <strong>96%</strong>
+                        </div>
+                        <div class="metric-item">
+                            <span>Orders</span>
+                            <strong>186</strong>
+                        </div>
+                        <div class="metric-item">
+                            <span>Recipe activity</span>
+                            <strong>24</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section light-section picks-section" id="fresh-picks">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <div class="section-label">Today’s Homemade Picks</div>
+                    <h2>Made fresh today</h2>
+                    <p>Curated local favorites made by home chefs across the community.</p>
+                </div>
+
+                <div class="row g-4">
+                    {% for pick in today_picks %}
+                    <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+                        <article class="pick-card">
+                            {% if pick.image %}
+                                <img class="pick-image" src="{{ pick.image.url }}" alt="{{ pick.title }}">
+                            {% endif %}
+                            <div class="pick-badge">{{ pick.tag }}</div>
+                            <div class="pick-icon"><i class="fa-solid fa-seedling"></i></div>
+                            <h4>{{ pick.title }}</h4>
+                            <p>{{ pick.creator }}</p>
+                            <span>{{ pick.city }}</span>
+                            {% if pick.description %}<small class="pick-description">{{ pick.description }}</small>{% endif %}
+                        </article>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="section trending-section" id="trending">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <div class="section-label">Trending Recipes</div>
+                    <h2>🔥 Trending this week</h2>
+                    <p>Most viewed, liked and saved recipes from the FlavorCraft community.</p>
+                </div>
+
+                <div class="row g-4">
+                    {% for recipe in trending_recipes %}
+                    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+                        <article class="trending-card">
+                            <div class="trending-top">
+                                <span class="trending-rank">#{{ forloop.counter }}</span>
+                                <span class="trending-badge">{{ recipe.likes }} likes</span>
+                            </div>
+                            <div class="trending-thumb">
+                                {% if recipe.thumbnail %}
+                                    <img src="{{ recipe.thumbnail.url }}" alt="{{ recipe.name }}">
+                                {% elif recipe.recipe_video %}
+                                    <video muted loop playsinline>
+                                        <source src="{{ recipe.recipe_video.url }}" type="video/mp4">
+                                    </video>
+                                {% else %}
+                                    <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=700&q=80" alt="{{ recipe.name }}">
+                                {% endif %}
+                            </div>
+                            <div class="trending-body">
+                                <h4>{{ recipe.name }}</h4>
+                                <div class="trending-meta">
+                                    <span><i class="fa-solid fa-eye"></i> {{ recipe.views }}</span>
+                                    <span><i class="fa-solid fa-heart"></i> {{ recipe.likes }}</span>
+                                </div>
+                                <p>{{ recipe.description|truncatechars:90 }}</p>
+                            </div>
+                        </article>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <div class="empty-creator-box">
+                            <i class="fa-solid fa-fire"></i>
+                            <p>No trending recipes yet. Add new recipe uploads to populate the trend board.</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="section taste-section" id="taste-profile">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <div class="section-label">Smart Taste Profile</div>
+                    <h2>Recipes picked for your taste</h2>
+                    <p>Choose what you love and let the platform personalize your home feed.</p>
+                </div>
+
+                <div class="taste-grid" data-aos="fade-up" data-aos-delay="100">
+                    {% for taste in taste_cards %}
+                    <button type="button" class="taste-chip">
+                        <i class="fa-solid {{ taste.icon }}"></i>
+                        {{ taste.label }}
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="section light-section story-section" id="food-story">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6" data-aos="fade-right">
+                        <div class="story-card">
+                            <div class="story-label">FlavorCraft Food Story</div>
+                            <h3>Divya's Kitchen</h3>
+                            <blockquote>
+                                “I learned these recipes from my grandmother and now I share them with my community.”
+                            </blockquote>
+                            <div class="story-badges">
+                                <span>North Indian</span>
+                                <span>Pickles</span>
+                                <span>Traditional Sweets</span>
+                            </div>
+                            <ul>
+                                <li>Aam ka Achaar</li>
+                                <li>Besan Ladoo</li>
+                                <li>Homemade Masala</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6" data-aos="fade-left">
+                        <div class="story-visual">
+                            <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1000&q=80" alt="Home chef story">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section light-section" id="features">
+
+            <div class="container">
+
+                <div class="section-heading" data-aos="fade-up">
+
+                    <div class="section-label">Why FlavorCraft</div>
+
+                    <h2>
+                        Everything Food Lovers Need
+                    </h2>
+
+                    <p>
+                        A simple and modern platform for discovering homemade
+                        food, sharing recipes and growing your food business.
+                    </p>
+
+                </div>
+
+                <div class="row g-4">
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+
+                        <div class="feature-card">
+
+                            <div class="feature-icon green-icon">
+                                <i class="fa-solid fa-video"></i>
+                            </div>
+
+                            <h4>Recipe Videos</h4>
+
+                            <p>
+                                Watch and share cooking tutorials from talented
+                                home chefs and food creators.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+
+                        <div class="feature-card">
+
+                            <div class="feature-icon orange-icon">
+                                <i class="fa-solid fa-store"></i>
+                            </div>
+
+                            <h4>Sell Homemade Food</h4>
+
+                            <p>
+                                Showcase pickles, snacks, sweets, spices and
+                                other delicious homemade products.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+
+                        <div class="feature-card">
+
+                            <div class="feature-icon red-icon">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+
+                            <h4>Easy WhatsApp Contact</h4>
+
+                            <p>
+                                Connect directly with sellers and customers
+                                for quick communication and ordering.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="section" id="about">
+
+            <div class="container">
+
+                <div class="row align-items-center g-5">
+
+                    <div class="col-lg-6" data-aos="fade-right">
+
+                        <div class="about-image-wrap">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1000&q=85"
+                                class="about-image"
+                                alt="Healthy Homemade Food">
+
+                            <div class="about-badge">
+                                <strong>100%</strong>
+                                <span>Homemade Food Spirit</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6" data-aos="fade-left">
+
+                        <div class="about-content">
+
+                            <div class="section-label">
+                                About FlavorCraft
+                            </div>
+
+                            <h2>
+                                From Your Kitchen
+                                <span class="text-success">to Your Community.</span>
+                            </h2>
+
+                            <p>
+                                FlavorCraft connects passionate home chefs with
+                                people who love authentic homemade food. Share
+                                your cooking skills, discover new recipes and
+                                turn your favourite homemade products into a
+                                growing local business.
+                            </p>
+
+                            <ul class="about-list">
+
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    Discover authentic homemade recipes
+                                </li>
+
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    Upload and explore cooking videos
+                                </li>
+
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    Sell homemade food products
+                                </li>
+
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    Connect directly with customers
+                                </li>
+
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    Support local home-based businesses
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="section light-section" id="categories">
+
+            <div class="container">
+
+                <div class="section-heading" data-aos="fade-up">
+
+                    <div class="section-label">
+                        Explore Food
+                    </div>
+
+                    <h2>
+                        Discover Something Delicious
+                    </h2>
+
+                    <p>
+                        From traditional favourites to healthy homemade meals,
+                        explore food prepared with passion.
+                    </p>
+
+                </div>
+
+                <div class="row g-4">
+
+                    <div class="col-lg-3 col-md-6" data-aos="zoom-in">
+
+                        <div class="category-card">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80"
+                                alt="Homemade Snacks">
+
+                            <div class="category-info">
+                                <h5>Homemade Snacks</h5>
+                                <span>Crispy, tasty & fresh</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+
+                        <div class="category-card">
+
+                            <img
+                                src="{% static 'images/candy.avif' %}"
+                                alt="Traditional Sweets">
+
+                            <div class="category-info">
+                                <h5>Traditional Sweets</h5>
+                                <span>Made with love</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+
+                        <div class="category-card">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=700&q=80"
+                                alt="Spices">
+
+                            <div class="category-info">
+                                <h5>Spices & Pickles</h5>
+                                <span>Authentic flavours</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+
+                        <div class="category-card">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=700&q=80"
+                                alt="Healthy Meals">
+
+                            <div class="category-info">
+                                <h5>Healthy Meals</h5>
+                                <span>Fresh & nutritious</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {% if products %}
+        <section class="section light-section" id="products">
+            <div class="container">
+                <div class="section-heading" data-aos="fade-up">
+                    <div class="section-label">From Our Creators</div>
+                    <h2>Fresh Homemade Products</h2>
+                    <p>Discover products shared by FlavorCraft creators.</p>
+                </div>
+
+                <div class="row g-4">
+                    {% for product in products %}
+                    <div class="col-lg-3 col-md-6" data-aos="fade-up">
+                        <article class="product-card-home">
+                            <a class="product-image-home-wrap" href="{% url 'product_detail' product.id %}">
+                                {% if product.creator_choice %}<span class="product-badge-home"><i class="fa-solid fa-crown"></i> Creator's choice</span>{% elif product.is_homemade %}<span class="product-badge-home"><i class="fa-solid fa-heart"></i> Homemade</span>{% endif %}
+                                {% if product.product_pic %}<img src="{{ product.product_pic.url }}" alt="{{ product.product_name }}">{% else %}<img src="{% static 'images/candy.avif' %}" alt="{{ product.product_name }}">{% endif %}
+                            </a>
+                            <div class="product-card-home-body">
+                                <h5><a href="{% url 'product_detail' product.id %}">{{ product.product_name }}</a></h5>
+                                <div class="product-meta-home">
+                                    <span>{{ product.category }}</span>
+                                    <span>₹ {{ product.price }}</span>
+                                </div>
+                                <p>{{ product.description }}</p>
+                                <div class="product-card-home-footer">
+                                    <span class="product-creator-home"><i class="fa-solid fa-user-chef"></i> {{ product.creator.name }}</span>
+                                    <form method="post" action="{% url 'add_to_cart' product.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <input type="hidden" name="next" value="{{ request.path }}#products">
+                                        <button class="product-cart-button" type="submit"><i class="fa-solid fa-cart-plus"></i> Add to cart</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+        <section class="section steps-section" id="how-it-works">
+
+            <div class="container">
+
+                <div class="section-heading" data-aos="fade-up">
+
+                    <div class="section-label">
+                        Simple Process
+                    </div>
+
+                    <h2>
+                        How FlavorCraft Works
+                    </h2>
+
+                    <p>
+                        Start your FlavorCraft journey in four simple steps.
+                    </p>
+
+                </div>
+
+                <div class="row g-4">
+
+                    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+
+                        <div class="step-card">
+
+                            <span class="step-number">01</span>
+
+                            <div class="step-icon">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </div>
+
+                            <h5>Create Account</h5>
+
+                            <p>
+                                Register and create your FlavorCraft account.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+
+                        <div class="step-card">
+
+                            <span class="step-number">02</span>
+
+                            <div class="step-icon">
+                                <i class="fa-solid fa-video"></i>
+                            </div>
+
+                            <h5>Share Recipes</h5>
+
+                            <p>
+                                Share your favourite recipes and cooking videos.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+
+                        <div class="step-card">
+
+                            <span class="step-number">03</span>
+
+                            <div class="step-icon">
+                                <i class="fa-solid fa-basket-shopping"></i>
+                            </div>
+
+                            <h5>Sell Products</h5>
+
+                            <p>
+                                List your homemade products and reach customers.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+
+                        <div class="step-card">
+
+                            <span class="step-number">04</span>
+
+                            <div class="step-icon">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+
+                            <h5>Connect & Order</h5>
+
+                            <p>
+                                Connect with sellers and place your orders easily.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="marketplace-section">
+
+            <div class="container">
+
+                <div class="marketplace-box" data-aos="zoom-in">
+
+                    <div class="marketplace-content">
+
+                        <div class="row align-items-center g-4">
+
+                            <div class="col-lg-8">
+
+                                <h2>
+                                    Ready to Explore Homemade Goodness?
+                                </h2>
+
+                                <p>
+                                    Join the FlavorCraft community and discover
+                                    delicious food created by passionate home chefs.
+                                    Or start showcasing your own creations today.
+                                </p>
+
+                            </div>
+
+                            <div class="col-lg-4 text-lg-end">
+
+                                <a
+                                    href="{% url 'user_registration page' %}"
+                                    class="btn btn-light btn-lg px-4 py-3 rounded-3 fw-semibold"
+                                >
+                                    Join FlavorCraft
+                                    <i class="fa-solid fa-arrow-right ms-2"></i>
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="cta-section">
+
+            <div class="container">
+
+                <div class="cta-box" data-aos="fade-up">
+
+                    <div class="section-label">
+                        Your Food. Your Story. Your Community.
+                    </div>
+
+                    <h2>
+                        Turn Your Passion for Cooking
+                        <span class="text-success">Into Something Bigger.</span>
+                    </h2>
+
+                    <p>
+                        Create your account, share your recipes, showcase your
+                        homemade products and connect with people who love
+                        authentic food.
+                    </p>
+
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+
+                        <a
+                            href="{% url 'user_registration page' %}"
+                            class="btn hero-btn hero-primary"
+                        >
+                            <i class="fa-solid fa-user-plus me-2"></i>
+                            Register Now
+                        </a>
+
+                        <a
+                            href="{% url 'user_login page' %}"
+                            class="btn hero-btn hero-secondary"
+                        >
+                            <i class="fa-solid fa-right-to-bracket me-2"></i>
+                            Login
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    {% include 'common/footer.html' %}
+
+    <button class="scroll-top" id="scrollTop" aria-label="Back to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            AOS.init({
+                duration: 850,
+                once: true,
+                offset: 80,
+                easing: "ease-out-cubic"
+            });
+
+            const scrollTop = document.getElementById("scrollTop");
+
+            window.addEventListener("scroll", function () {
+
+                if (window.scrollY > 500) {
+                    scrollTop.classList.add("show");
+                } else {
+                    scrollTop.classList.remove("show");
+                }
+
+            });
+
+            scrollTop.addEventListener("click", function () {
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            });
+
+        });
+    </script>
+
+</body>
+</html>
+```

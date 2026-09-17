@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - FlavorCraft</title>
+    {% include 'common/common_css.html' %}
+
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate On Scroll (AOS) Library -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #e65c00 0%, #f9d423 100%);
+            --header-gradient: linear-gradient(90deg, #a35c5c, #7a3f3f);
+            --accent-color: #f5a623;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --active-shadow: 0 15px 35px rgba(230, 92, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Top Announcement Banner */
+        .top-banner {
+            background: var(--header-gradient);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Hero Heading Section */
+        .page-heading {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            text-align: center;
+            padding: 80px 20px 90px;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .page-heading h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .page-heading p {
+            font-size: 1.15rem;
+            color: #e0e0e0;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        /* Live Search Bar */
+        .search-wrapper {
+            max-width: 550px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 16px 25px 16px 55px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-wrapper input:focus {
+            box-shadow: 0 12px 30px rgba(230, 92, 0, 0.3);
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* FAQ Main Container */
+        .faq-container {
+            max-width: 880px;
+            margin: -40px auto 60px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.08);
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 6px 18px rgba(230, 92, 0, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* FAQ Item Card */
+        .faq-item {
+            background: #ffffff;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .faq-item.active {
+            box-shadow: var(--active-shadow);
+            border-color: rgba(230, 92, 0, 0.2);
+        }
+
+        .faq-item.active::before {
+            opacity: 1;
+        }
+
+        /* FAQ Question Bar */
+        .faq-question {
+            padding: 22px 28px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 1.1rem;
+            user-select: none;
+            transition: color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: #e65c00;
+        }
+
+        .faq-question .icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff5eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e65c00;
+            font-size: 14px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.3s ease, color 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+
+        .faq-item.active .icon-box {
+            transform: rotate(180deg);
+            background: var(--primary-gradient);
+            color: #ffffff;
+        }
+
+        /* FAQ Answer Animation */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1), padding 0.3s ease, opacity 0.3s ease;
+            padding: 0 28px;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.8;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 28px 20px 28px;
+            opacity: 1;
+        }
+
+        /* Helpful Feedback Buttons inside Answer */
+        .faq-feedback {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f1f2f6;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .feedback-btn {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .feedback-btn:hover {
+            background: #e65c00;
+            color: #ffffff;
+            border-color: #e65c00;
+        }
+
+        /* Contact Support Banner */
+        .support-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2b2d42 100%);
+            border-radius: 20px;
+            padding: 35px 30px;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            margin-top: 50px;
+        }
+
+        .support-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .support-card p {
+            color: #a0a5b5;
+            margin-bottom: 20px;
+            font-size: 0.98rem;
+        }
+
+        .support-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary-gradient);
+            color: #ffffff;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(230, 92, 0, 0.3);
+        }
+
+        .support-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(230, 92, 0, 0.45);
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .page-heading h1 { font-size: 2rem; }
+            .faq-question { padding: 18px 20px; font-size: 1rem; }
+            .faq-answer { padding: 0 20px; font-size: 0.95rem; }
+            .support-card { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-banner text-center">
+        <h2 style="font-size: 15px; margin: 0; font-weight: 600;">❤️ Crafting Flavor, Creating Memories ❤️</h2>
+    </div>
+
+    <!-- Header Code -->
+    {% include 'common/header.html' %}
+
+    <div class="main">
+
+        <!-- Hero Section with Search -->
+        <div class="page-heading" data-aos="fade-down">
+            <h1>Frequently Asked Questions</h1>
+            <p>Have questions? We're here to help you navigate FlavorCraft.</p>
+            
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="faqSearch" placeholder="Search your question here..." onkeyup="filterFaqs()">
+            </div>
+        </div>
+
+        <!-- FAQ Content Area -->
+        <div class="faq-container">
+
+            <!-- Category Filter Tabs -->
+            <div class="category-tabs" data-aos="fade-up">
+                <button class="tab-btn active" onclick="filterCategory('all', this)">All Questions</button>
+                <button class="tab-btn" onclick="filterCategory('general', this)">General</button>
+                <button class="tab-btn" onclick="filterCategory('creators', this)">For Creators</button>
+                <button class="tab-btn" onclick="filterCategory('orders', this)">Orders & Contact</button>
+            </div>
+
+            <!-- FAQ Items List -->
+            <div id="faqList">
+
+                <div class="faq-item" data-category="general" data-aos="fade-up" data-aos-delay="100">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What is FlavorCraft?</span>
+                        <div class="icon-box"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>FlavorCraft is an interactive marketplace platform that connects passionate home cooks and culinary creators directly with customers. You can share recipe videos, sell authentic homemade products like pickles and snacks, and receive direct inquiries.</p>
+                        <div class="faq-feedback">
+                            <span>Was this helpful?</span>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'yes')"><i class="fa-regular fa-thumbs-up me-1"></i> Yes</button>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'no')"><i class="fa-regular fa-thumbs-down me-1"></i> No</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-category="creators" data-aos="fade-up" data-aos-delay="150">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How do I become a creator on FlavorCraft?</span>
+                        <div class="icon-box"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Click on "Register" in the top navigation bar, choose Creator Registration, and fill in your details along with a profile picture. Once verified, you can log in and start uploading your recipes and food items immediately.</p>
+                        <div class="faq-feedback">
+                            <span>Was this helpful?</span>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'yes')"><i class="fa-regular fa-thumbs-up me-1"></i> Yes</button>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'no')"><i class="fa-regular fa-thumbs-down me-1"></i> No</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-category="orders" data-aos="fade-up" data-aos-delay="200">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How do I contact a creator or place an order?</span>
+                        <div class="icon-box"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Every recipe and product page features a prominent "Chat on WhatsApp" button. Clicking this automatically opens a direct WhatsApp chat with the creator so you can negotiate pricing, ask questions, or place custom orders easily.</p>
+                        <div class="faq-feedback">
+                            <span>Was this helpful?</span>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'yes')"><i class="fa-regular fa-thumbs-up me-1"></i> Yes</button>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'no')"><i class="fa-regular fa-thumbs-down me-1"></i> No</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-category="general" data-aos="fade-up" data-aos-delay="250">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Is it free to use FlavorCraft?</span>
+                        <div class="icon-box"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, absolutely! Browsing recipes, discovering creators, and registering as either a user or creator is 100% free of charge.</p>
+                        <div class="faq-feedback">
+                            <span>Was this helpful?</span>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'yes')"><i class="fa-regular fa-thumbs-up me-1"></i> Yes</button>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'no')"><i class="fa-regular fa-thumbs-down me-1"></i> No</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-category="creators" data-aos="fade-up" data-aos-delay="300">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Can I upload my own recipe video?</span>
+                        <div class="icon-box"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! Registered creators can navigate to the "Upload Recipe" dashboard section to share video tutorials, detailed ingredients lists, step-by-step preparation steps, and food images.</p>
+                        <div class="faq-feedback">
+                            <span>Was this helpful?</span>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'yes')"><i class="fa-regular fa-thumbs-up me-1"></i> Yes</button>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'no')"><i class="fa-regular fa-thumbs-down me-1"></i> No</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-category="orders" data-aos="fade-up" data-aos-delay="350">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How can I leave a review or rating?</span>
+                        <div class="icon-box"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Once you log in, navigate to the Feedback section on any product or creator page to leave star ratings and community reviews about your experience.</p>
+                        <div class="faq-feedback">
+                            <span>Was this helpful?</span>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'yes')"><i class="fa-regular fa-thumbs-up me-1"></i> Yes</button>
+                            <button class="feedback-btn" onclick="giveFeedback(this, 'no')"><i class="fa-regular fa-thumbs-down me-1"></i> No</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Still Have Questions Card -->
+            <div class="support-card" data-aos="zoom-in">
+                <h3>Still Have Questions?</h3>
+                <p>Can't find the answer you're looking for? Reach out to our support team directly.</p>
+                <a href="https://wa.me/" target="_blank" class="support-btn">
+                    <i class="fa-brands fa-whatsapp fs-5"></i> Chat With Support
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer Code -->
+    {% include 'common/footer.html' %}
+
+    <!-- AOS Animation Library JS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 800 });
+
+        // Accordion Toggle Function
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            const isActive = item.classList.contains('active');
+
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // Live Search Filter Function
+        function filterFaqs() {
+            const query = document.getElementById('faqSearch').value.toLowerCase();
+            const items = document.querySelectorAll('.faq-item');
+
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Category Filter Function
+        function filterCategory(category, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const items = document.querySelectorAll('.faq-item');
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Feedback Click Interaction
+        function giveFeedback(btn, response) {
+            const parent = btn.parentElement;
+            parent.innerHTML = '<span style="color: #27ae60; font-weight: 600;"><i class="fa-solid fa-circle-check me-1"></i> Thank you for your feedback!</span>';
+        }
+    </script>
+
+</body>
+</html>

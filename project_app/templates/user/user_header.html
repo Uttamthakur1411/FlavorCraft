@@ -1,0 +1,285 @@
+<!-- FontAwesome Icons & Google Fonts (Agar tumhare parent file me nahi hai to include karein) -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    :root {
+        --nav-bg: #0f0728;
+        --offcanvas-bg: linear-gradient(180deg, #120638 0%, #0a0320 100%);
+        --primary-gradient: linear-gradient(135deg, #e65c00 0%, #f9d423 100%);
+        --hover-bg: rgba(255, 255, 255, 0.06);
+        --text-active: #ffffff;
+        --text-muted: #a0a5b5;
+    }
+
+    /* Main Navbar Header Styling */
+    .custom-navbar {
+        background-color: var(--nav-bg) !important;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        padding: 10px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .toggler-btn {
+        border: none !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        padding: 8px 12px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .toggler-btn:hover {
+        background: var(--primary-gradient) !important;
+        transform: scale(1.05);
+    }
+
+    /* Offcanvas Sidebar Styling */
+    .custom-offcanvas {
+        background: var(--offcanvas-bg) !important;
+        width: 280px !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Header Profile Card */
+    .offcanvas-header-custom {
+        padding: 24px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .user-profile-badge {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .avatar-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--primary-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 18px;
+        box-shadow: 0 4px 15px rgba(230, 92, 0, 0.3);
+        overflow: hidden;
+    }
+
+    .user-avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .user-name {
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin: 0;
+        letter-spacing: 0.3px;
+    }
+
+    .user-status {
+        font-size: 0.75rem;
+        color: #27ae60;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 600;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        background-color: #27ae60;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #27ae60;
+    }
+
+    /* Navigation Links Styling */
+    .offcanvas-body-custom {
+        padding: 20px 15px;
+    }
+
+    .nav-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-left: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .custom-nav-link {
+        display: flex;
+        align-items: center;
+        padding: 12px 18px;
+        color: var(--text-muted) !important;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Link Hover Effects */
+    .custom-nav-link:hover {
+        color: #ffffff !important;
+        background: var(--hover-bg);
+        transform: translateX(6px);
+    }
+
+    .custom-nav-link i {
+        font-size: 1.1rem;
+        width: 28px;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .custom-nav-link:hover i {
+        transform: scale(1.15);
+        color: #f9d423;
+    }
+
+    /* Active Link State */
+    .custom-nav-link.active-link {
+        color: #ffffff !important;
+        background: linear-gradient(90deg, rgba(230, 92, 0, 0.2) 0%, rgba(249, 212, 35, 0.05) 100%);
+        border-left: 4px solid #e65c00;
+    }
+
+    .custom-nav-link.active-link i {
+        color: #f9d423;
+    }
+
+    /* Logout Button Styling */
+    .logout-item {
+        margin-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 15px;
+    }
+
+    .logout-link {
+        color: #ff6b6b !important;
+        background: rgba(255, 107, 107, 0.08);
+    }
+
+    .logout-link:hover {
+        background: #ff6b6b !important;
+        color: #ffffff !important;
+    }
+
+    .logout-link:hover i {
+        color: #ffffff !important;
+    }
+</style>
+
+<!-- Navbar Component -->
+<nav class="navbar fixed-top custom-navbar">
+  <div class="container-fluid">
+
+    <!-- Sidebar Toggler Button -->
+    <button class="navbar-toggler toggler-btn" type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasDarkNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Offcanvas Navigation Menu -->
+    <div class="offcanvas offcanvas-start custom-offcanvas"
+         data-bs-backdrop="true"
+         tabindex="-1"
+         id="offcanvasDarkNavbar">
+
+      <!-- Header with User Profile -->
+      <div class="offcanvas-header offcanvas-header-custom">
+        <div class="user-profile-badge">
+            <div class="avatar-icon">
+                {% if user_key and user_key.profile_pic %}
+                    <img src="{{ user_key.profile_pic.url }}" alt="{{ user_key.name }}" class="user-avatar-image">
+                {% else %}
+                    <i class="fa-solid fa-user"></i>
+                {% endif %}
+            </div>
+            <div>
+                <h5 class="user-name">{{ user_key.name|default:"Hello User" }}</h5>
+                <span class="user-status"><span class="status-dot"></span> Online</span>
+            </div>
+        </div>
+
+        <button type="button"
+                class="btn-close btn-close-white opacity-75"
+                data-bs-dismiss="offcanvas">
+        </button>
+      </div>
+
+      <!-- Navigation Links Body -->
+      <div class="offcanvas-body offcanvas-body-custom">
+        <ul class="nav-list">
+
+          <!-- Home -->
+          <li class="nav-item">
+            <a class="custom-nav-link active-link" href="/user_home/">
+              <i class="fa-solid fa-house me-3"></i> Home
+            </a>
+          </li>
+
+          <!-- Feedback -->
+          <li class="nav-item">
+            <a class="custom-nav-link" href="/user_feedback/">
+              <i class="fa-solid fa-comments me-3"></i> Feedback
+            </a>
+          </li>
+
+          <!-- Search Video -->
+          <li class="nav-item">
+            <a class="custom-nav-link" href="/search_video/">
+              <i class="fa-solid fa-video me-3"></i> Search Video
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="custom-nav-link" href="{% url 'cart' %}">
+              <i class="fa-solid fa-cart-shopping me-3"></i> Cart
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="custom-nav-link" href="{% url 'user_orders' %}">
+              <i class="fa-solid fa-box me-3"></i> My Orders
+            </a>
+          </li>
+
+          <!-- Task -->
+          <li class="nav-item">
+            <a class="custom-nav-link" href="#">
+              <i class="fa-solid fa-list-check me-3"></i> Task
+            </a>
+          </li>
+
+          <!-- Edit Profile -->
+          <li class="nav-item">
+            <a class="custom-nav-link" href="#">
+              <i class="fa-solid fa-user-gear me-3"></i> Edit Profile
+            </a>
+          </li>
+
+          <!-- Logout -->
+          <li class="nav-item logout-item">
+            <a class="custom-nav-link logout-link" href="/user_logout/">
+              <i class="fa-solid fa-right-from-bracket me-3"></i> Logout
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</nav>

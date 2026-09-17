@@ -1,0 +1,1412 @@
+```html
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | FlavorCraft</title>
+
+    {% include 'common/common_css.html' %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --green: #117a4b;
+            --green-dark: #075c38;
+            --green-light: #e9f8f0;
+            --green-bright: #27ad70;
+            --orange: #f28b4b;
+            --orange-light: #fff0e5;
+            --cream: #fffaf5;
+            --dark: #17231c;
+            --muted: #7b8780;
+            --border: #e3ebe6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: "DM Sans", sans-serif;
+            color: var(--dark);
+            position: relative;
+            background:
+                radial-gradient(circle at 8% 15%, rgba(17,122,75,.14), transparent 27%),
+                radial-gradient(circle at 92% 17%, rgba(242,139,75,.14), transparent 26%),
+                radial-gradient(circle at 76% 88%, rgba(17,122,75,.09), transparent 30%),
+                linear-gradient(135deg, #fffdf9 0%, #f4faf7 48%, #fff7ef 100%);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 540px;
+            height: 540px;
+            left: -220px;
+            top: -210px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                rgba(17,122,75,.19),
+                rgba(17,122,75,.06) 42%,
+                transparent 72%
+            );
+            filter: blur(18px);
+            z-index: 0;
+            pointer-events: none;
+            animation: greenAmbient 12s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            right: -200px;
+            bottom: -190px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                rgba(242,139,75,.18),
+                rgba(242,139,75,.05) 43%,
+                transparent 73%
+            );
+            filter: blur(20px);
+            z-index: 0;
+            pointer-events: none;
+            animation: orangeAmbient 14s ease-in-out infinite alternate;
+        }
+
+        .floating-back-button {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 2000;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #0d5c38, #198754, #27ad70);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            box-shadow: 0 14px 28px rgba(17, 122, 75, .24);
+            border: 1px solid rgba(255,255,255,.18);
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .floating-back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 32px rgba(17, 122, 75, .28);
+        }
+
+        @media (max-width: 767px) {
+            .floating-back-button {
+                top: 14px;
+                left: 12px;
+                padding: 9px 12px;
+                font-size: 11px;
+            }
+        }
+
+        @keyframes greenAmbient {
+            0% {
+                transform: translate(0,0) scale(1);
+            }
+            50% {
+                transform: translate(70px,45px) scale(1.12);
+            }
+            100% {
+                transform: translate(30px,90px) scale(.97);
+            }
+        }
+
+        @keyframes orangeAmbient {
+            0% {
+                transform: translate(0,0) scale(1);
+            }
+            50% {
+                transform: translate(-65px,-45px) scale(1.13);
+            }
+            100% {
+                transform: translate(-25px,-80px) scale(.96);
+            }
+        }
+
+        .background-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: .30;
+            background-image:
+                linear-gradient(rgba(17,122,75,.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(17,122,75,.035) 1px, transparent 1px);
+            background-size: 55px 55px;
+            mask-image: linear-gradient(to bottom, #000, transparent 90%);
+        }
+
+        .floating-light {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .light-one {
+            width: 7px;
+            height: 7px;
+            top: 23%;
+            left: 13%;
+            background: #117a4b;
+            box-shadow: 0 0 35px 10px rgba(17,122,75,.14);
+            animation: lightOne 7s ease-in-out infinite;
+        }
+
+        .light-two {
+            width: 6px;
+            height: 6px;
+            top: 35%;
+            right: 14%;
+            background: #f28b4b;
+            box-shadow: 0 0 30px 9px rgba(242,139,75,.15);
+            animation: lightTwo 8s ease-in-out infinite;
+        }
+
+        .light-three {
+            width: 5px;
+            height: 5px;
+            bottom: 18%;
+            left: 32%;
+            background: #117a4b;
+            box-shadow: 0 0 28px 8px rgba(17,122,75,.12);
+            animation: lightThree 9s ease-in-out infinite;
+        }
+
+        @keyframes lightOne {
+            0%,100% {
+                transform: translate(0,0);
+                opacity: .3;
+            }
+            50% {
+                transform: translate(40px,-45px);
+                opacity: .85;
+            }
+        }
+
+        @keyframes lightTwo {
+            0%,100% {
+                transform: translate(0,0);
+                opacity: .3;
+            }
+            50% {
+                transform: translate(-45px,35px);
+                opacity: .8;
+            }
+        }
+
+        @keyframes lightThree {
+            0%,100% {
+                transform: translate(0,0);
+                opacity: .25;
+            }
+            50% {
+                transform: translate(30px,-30px);
+                opacity: .75;
+            }
+        }
+
+        .top-bar {
+            position: relative;
+            z-index: 50;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 15px;
+            color: #fff;
+            background:
+                linear-gradient(
+                    100deg,
+                    #075c38,
+                    #117a4b,
+                    #29ad72,
+                    #117a4b,
+                    #075c38
+                );
+            background-size: 250% 100%;
+            animation: topGradient 8s ease infinite;
+            box-shadow: 0 6px 25px rgba(7,92,56,.15);
+        }
+
+        .top-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .5px;
+        }
+
+        .top-content i {
+            color: #ffd166;
+            animation: heartPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes topGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes heartPulse {
+            0%,100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.25);
+            }
+        }
+
+        .site-header {
+            position: relative;
+            z-index: 5000;
+        }
+
+        .site-header .navbar {
+            background: rgba(255,255,255,.78) !important;
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border-bottom: 1px solid rgba(17,122,75,.08);
+            box-shadow: 0 8px 30px rgba(20,66,44,.06);
+        }
+
+        .register-section {
+            position: relative;
+            z-index: 5;
+            min-height: calc(100vh - 110px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 34px 18px 48px;
+        }
+
+        .register-card {
+            position: relative;
+            width: 100%;
+            max-width: 950px;
+            display: grid;
+            grid-template-columns: .86fr 1.14fr;
+            overflow: hidden;
+            border-radius: 25px;
+            background: rgba(255,255,255,.76);
+            border: 1px solid rgba(255,255,255,.96);
+            backdrop-filter: blur(26px);
+            -webkit-backdrop-filter: blur(26px);
+            box-shadow:
+                0 30px 80px rgba(24,72,49,.14),
+                0 6px 25px rgba(24,72,49,.05);
+            animation: cardEntrance .85s cubic-bezier(.2,.8,.2,1);
+        }
+
+        .register-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            border-radius: inherit;
+            background: linear-gradient(
+                125deg,
+                rgba(17,122,75,.25),
+                transparent 35%,
+                rgba(242,139,75,.20)
+            );
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(.975);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .visual-side {
+            position: relative;
+            min-height: 600px;
+            overflow: hidden;
+            padding: 34px;
+            display: flex;
+            align-items: flex-end;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(3,60,36,.94),
+                    rgba(17,122,75,.77)
+                ),
+                url("{% static 'images/Craft1.jpg' %}") center/cover;
+        }
+
+        .visual-side::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    to top,
+                    rgba(2,30,18,.97),
+                    rgba(2,30,18,.42) 55%,
+                    rgba(2,30,18,.08)
+                );
+        }
+
+        .circle-one,
+        .circle-two {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.14);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .circle-one {
+            width: 350px;
+            height: 350px;
+            right: -175px;
+            top: -180px;
+            animation: rotateRing 18s linear infinite;
+        }
+
+        .circle-two {
+            width: 230px;
+            height: 230px;
+            left: -120px;
+            bottom: -140px;
+            border-color: rgba(255,255,255,.10);
+            animation: rotateRing 14s linear infinite reverse;
+        }
+
+        @keyframes rotateRing {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .visual-glow {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            right: 30px;
+            bottom: 75px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.08);
+            filter: blur(28px);
+            z-index: 2;
+            animation: visualGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes visualGlow {
+            0%,100% {
+                transform: scale(.8);
+                opacity: .25;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: .65;
+            }
+        }
+
+        .brand {
+            position: absolute;
+            top: 29px;
+            left: 31px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            width: 37px;
+            height: 37px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            color: var(--green);
+            background: #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,.17);
+            animation: brandFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes brandFloat {
+            0%,100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px) rotate(-3deg);
+            }
+        }
+
+        .welcome-badge {
+            position: absolute;
+            top: 92px;
+            right: 23px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 12px;
+            border-radius: 13px;
+            color: #34443b;
+            background: rgba(255,255,255,.94);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 35px rgba(0,0,0,.16);
+            font-size: 8px;
+            font-weight: 800;
+            animation: badgeFloat 4s ease-in-out infinite;
+        }
+
+        .welcome-badge i {
+            color: var(--orange);
+        }
+
+        @keyframes badgeFloat {
+            0%,100% {
+                transform: translateY(0) rotate(1deg);
+            }
+            50% {
+                transform: translateY(-9px) rotate(-2deg);
+            }
+        }
+
+        .visual-content {
+            position: relative;
+            z-index: 5;
+        }
+
+        .visual-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 11px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(255,255,255,.18);
+            border-radius: 50px;
+            color: #fff;
+            background: rgba(255,255,255,.09);
+            backdrop-filter: blur(12px);
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            animation: slideUp .8s ease .2s both;
+        }
+
+        .visual-label i {
+            color: #ffd166;
+        }
+
+        .visual-content h1 {
+            max-width: 350px;
+            margin: 0 0 13px;
+            color: #fff;
+            font-family: "Playfair Display", serif;
+            font-size: clamp(2.25rem,4vw,3.1rem);
+            line-height: 1.08;
+            letter-spacing: -1px;
+            font-weight: 800;
+            animation: slideUp .8s ease .35s both;
+        }
+
+        .visual-content h1 span {
+            color: #ffd29b;
+        }
+
+        .visual-content p {
+            max-width: 345px;
+            margin: 0;
+            color: rgba(255,255,255,.76);
+            font-size: 9px;
+            line-height: 1.85;
+            animation: slideUp .8s ease .5s both;
+        }
+
+        .visual-points {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 20px;
+            animation: slideUp .8s ease .65s both;
+        }
+
+        .visual-point {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,.88);
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .visual-point i {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            color: #9af2c2;
+            background: rgba(255,255,255,.10);
+            transition: .3s ease;
+        }
+
+        .visual-point:hover i {
+            transform: translateX(4px) rotate(-4deg);
+            background: rgba(255,255,255,.18);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(17px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-side {
+            position: relative;
+            padding: 34px 40px;
+            background: rgba(255,255,255,.92);
+        }
+
+        .form-header {
+            margin-bottom: 19px;
+            animation: formAppear .7s ease .2s both;
+        }
+
+        .form-icon {
+            width: 43px;
+            height: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            border-radius: 13px;
+            color: var(--green);
+            background: linear-gradient(135deg,#e8f8ef,#f8fffb);
+            box-shadow: 0 9px 22px rgba(17,122,75,.10);
+            animation: brandFloat 3s ease-in-out infinite;
+        }
+
+        .form-header small {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--orange);
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+        }
+
+        .form-header h2 {
+            margin: 0;
+            font-family: "Playfair Display", serif;
+            font-size: 28px;
+            line-height: 1.15;
+            font-weight: 800;
+            letter-spacing: -.7px;
+        }
+
+        .form-header p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 9px;
+            line-height: 1.65;
+        }
+
+        @keyframes formAppear {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 11px 13px;
+        }
+
+        .form-group {
+            animation: fieldAppear .6s ease both;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: .30s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: .36s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: .42s;
+        }
+
+        .form-group:nth-child(4) {
+            animation-delay: .48s;
+        }
+
+        .form-group:nth-child(5) {
+            animation-delay: .54s;
+        }
+
+        .form-group:nth-child(6) {
+            animation-delay: .60s;
+        }
+
+        .form-group:nth-child(7) {
+            animation-delay: .66s;
+        }
+
+        @keyframes fieldAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            color: #34433a;
+            font-size: 8px;
+            font-weight: 800;
+        }
+
+        .field {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            z-index: 2;
+            transform: translateY(-50%);
+            color: #9aa59f;
+            font-size: 11px;
+            transition: .3s ease;
+        }
+
+        .form-control,
+        .form-select {
+            width: 100%;
+            height: 39px;
+            padding: 0 12px 0 34px !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 10px !important;
+            outline: none;
+            background: #f8fbf9 !important;
+            color: #26342c;
+            font-family: "DM Sans", sans-serif;
+            font-size: 9px !important;
+            box-shadow: none !important;
+            transition: all .3s cubic-bezier(.2,.8,.2,1);
+        }
+
+        textarea.form-control {
+            height: 58px;
+            min-height: 58px;
+            padding: 9px 12px 9px 34px !important;
+            resize: vertical;
+        }
+
+        .form-control::placeholder {
+            color: #a6afaa;
+        }
+
+        .form-control:hover,
+        .form-select:hover {
+            background: #fff !important;
+            border-color: rgba(17,122,75,.26) !important;
+            transform: translateY(-1px);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: #fff !important;
+            border-color: var(--green) !important;
+            transform: translateY(-2px);
+            box-shadow:
+                0 7px 18px rgba(17,122,75,.07),
+                0 0 0 3px rgba(17,122,75,.06) !important;
+        }
+
+        .field:focus-within .field-icon {
+            color: var(--green);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .profile-upload .form-control {
+            height: 39px;
+            padding: 7px 8px 7px 34px !important;
+            cursor: pointer;
+        }
+
+        .profile-upload .field-icon {
+            top: 20px;
+        }
+
+        .submit-area {
+            margin-top: 16px;
+            animation: formAppear .7s ease .8s both;
+        }
+
+        .register-button {
+            position: relative;
+            width: 100%;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            overflow: hidden;
+            border: 0;
+            border-radius: 11px;
+            color: #fff;
+            background:
+                linear-gradient(
+                    110deg,
+                    #075c38,
+                    #15935a,
+                    #2bad73,
+                    #15935a,
+                    #075c38
+                );
+            background-size: 250% 100%;
+            box-shadow: 0 12px 26px rgba(17,122,75,.22);
+            font-family: "DM Sans", sans-serif;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all .35s ease;
+            animation: buttonFlow 6s ease infinite;
+        }
+
+        @keyframes buttonFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .register-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -110%;
+            width: 65%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,.42),
+                transparent
+            );
+            transform: skewX(-20deg);
+            transition: left .7s ease;
+        }
+
+        .register-button:hover::before {
+            left: 140%;
+        }
+
+        .register-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 35px rgba(17,122,75,.29);
+        }
+
+        .register-button:active {
+            transform: translateY(-1px);
+        }
+
+        .register-button i {
+            transition: transform .3s ease;
+        }
+
+        .register-button:hover i {
+            transform: translateX(5px);
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 11px;
+            padding: 8px;
+            border-radius: 9px;
+            color: #7d8881;
+            background: #f7faf8;
+            border: 1px solid #edf2ee;
+            font-size: 7px;
+            font-weight: 700;
+            animation: formAppear .7s ease .9s both;
+        }
+
+        .security-note i {
+            color: var(--green);
+        }
+
+        .corner-decoration {
+            position: absolute;
+            width: 125px;
+            height: 125px;
+            right: -65px;
+            bottom: -65px;
+            border-radius: 50%;
+            background: rgba(17,122,75,.045);
+        }
+
+        .corner-decoration::after {
+            content: "";
+            position: absolute;
+            inset: 20px;
+            border-radius: 50%;
+            border: 1px solid rgba(242,139,75,.16);
+        }
+
+        @media (max-width: 900px) {
+            .register-section {
+                padding: 30px 15px 45px;
+            }
+
+            .register-card {
+                max-width: 680px;
+                grid-template-columns: 1fr;
+            }
+
+            .visual-side {
+                min-height: 310px;
+            }
+
+            .form-side {
+                padding: 34px;
+            }
+
+            .visual-content h1 {
+                font-size: 2.45rem;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .top-bar {
+                min-height: 35px;
+            }
+
+            .top-content {
+                font-size: 7px;
+            }
+
+            .register-section {
+                padding: 20px 10px 35px;
+            }
+
+            .register-card {
+                border-radius: 19px;
+            }
+
+            .visual-side {
+                min-height: 275px;
+                padding: 23px;
+            }
+
+            .brand {
+                top: 19px;
+                left: 21px;
+                font-size: 14px;
+            }
+
+            .brand-icon {
+                width: 31px;
+                height: 31px;
+                border-radius: 9px;
+                font-size: 10px;
+            }
+
+            .welcome-badge {
+                top: 17px;
+                right: 15px;
+                padding: 7px 9px;
+                font-size: 6px;
+            }
+
+            .visual-content h1 {
+                font-size: 1.95rem;
+            }
+
+            .visual-content p {
+                font-size: 8px;
+            }
+
+            .visual-point {
+                font-size: 7px;
+            }
+
+            .visual-point i {
+                width: 18px;
+                height: 18px;
+            }
+
+            .form-side {
+                padding: 27px 19px;
+            }
+
+            .form-header h2 {
+                font-size: 25px;
+            }
+
+            .form-header p {
+                font-size: 8px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .form-control,
+            .form-select {
+                height: 40px;
+            }
+
+            textarea.form-control {
+                min-height: 62px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#" id="floatingBackButton" class="floating-back-button" aria-label="Go back">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Back</span>
+    </a>
+
+<div class="background-grid"></div>
+
+<div class="floating-light light-one"></div>
+<div class="floating-light light-two"></div>
+<div class="floating-light light-three"></div>
+
+<div class="top-bar">
+    <div class="top-content">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        Crafting Flavor, Creating Memories
+        <i class="fa-solid fa-heart"></i>
+    </div>
+</div>
+
+<div class="site-header">
+    {% include 'common/header.html' %}
+</div>
+
+{% include 'common/message.html' %}
+
+<main class="register-section">
+
+    <div class="register-card">
+
+        <section class="visual-side">
+
+            <div class="circle-one"></div>
+            <div class="circle-two"></div>
+            <div class="visual-glow"></div>
+
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                FlavorCraft
+            </div>
+
+            <div class="welcome-badge">
+                <i class="fa-solid fa-heart"></i>
+                Welcome to FlavorCraft
+            </div>
+
+            <div class="visual-content">
+
+                <div class="visual-label">
+                    <i class="fa-solid fa-leaf"></i>
+                    JOIN OUR COMMUNITY
+                </div>
+
+                <h1>
+                    Discover the
+                    <span>flavor</span>
+                    of homemade.
+                </h1>
+
+                <p>
+                    Create your FlavorCraft account and explore delicious
+                    recipes, talented creators and food made with passion.
+                </p>
+
+                <div class="visual-points">
+
+                    <div class="visual-point">
+                        <i class="fa-solid fa-check"></i>
+                        Discover homemade recipes
+                    </div>
+
+                    <div class="visual-point">
+                        <i class="fa-solid fa-check"></i>
+                        Connect with food creators
+                    </div>
+
+                    <div class="visual-point">
+                        <i class="fa-solid fa-check"></i>
+                        Share your food journey
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="form-side">
+
+            <div class="form-header">
+
+                <div class="form-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+                <small>CREATE YOUR ACCOUNT</small>
+
+                <h2>Join FlavorCraft</h2>
+
+                <p>
+                    Fill in your details and become part of our food community.
+                </p>
+
+            </div>
+
+            <form action="/user_registration/" method="post" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Full Name
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-user field-icon"></i>
+
+                            <input
+                                type="text"
+                                name="name"
+                                required
+                                class="form-control"
+                                placeholder="Enter your name"
+                                autocomplete="name"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Email Address
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-envelope field-icon"></i>
+
+                            <input
+                                type="email"
+                                name="email"
+                                required
+                                class="form-control"
+                                placeholder="Enter your email"
+                                autocomplete="email"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Password
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-lock field-icon"></i>
+
+                            <input
+                                type="password"
+                                name="password"
+                                required
+                                class="form-control"
+                                placeholder="Create password"
+                                autocomplete="new-password"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            Phone Number
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-phone field-icon"></i>
+
+                            <input
+                                type="tel"
+                                name="phone"
+                                required
+                                class="form-control"
+                                placeholder="Enter phone number"
+                                autocomplete="tel"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            City
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-location-dot field-icon"></i>
+
+                            <select
+                                class="form-select"
+                                name="city"
+                                required
+                            >
+                                <option value="">Select city</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Lucknow">Lucknow</option>
+                                <option value="Vanaras">Vanaras</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group profile-upload">
+
+                        <label class="form-label">
+                            Profile Picture
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-camera field-icon"></i>
+
+                            <input
+                                type="file"
+                                name="profile_pic"
+                                class="form-control"
+                                accept="image/*"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group full">
+
+                        <label class="form-label">
+                            About Me
+                        </label>
+
+                        <div class="field">
+
+                            <i class="fa-solid fa-pen field-icon"></i>
+
+                            <textarea
+                                name="about_me"
+                                required
+                                class="form-control"
+                                placeholder="Tell us about yourself and your food interests..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="submit-area">
+
+                    <button type="submit" class="register-button">
+                        <span>Create My Account</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                </div>
+
+            </form>
+
+            <div class="security-note">
+                <i class="fa-solid fa-shield-halved"></i>
+                Your information is securely submitted to FlavorCraft
+            </div>
+
+            <div class="corner-decoration"></div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% include 'common/footer.html' %}
+
+<script>
+    const floatingBackButtons = document.querySelectorAll('.floating-back-button');
+    let lastScrollY = window.scrollY;
+
+    function handleFloatingBackButtonState() {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY <= 20) {
+            floatingBackButtons.forEach(function (button) {
+                button.classList.remove('is-hidden');
+            });
+        } else if (currentScrollY > lastScrollY) {
+            floatingBackButtons.forEach(function (button) {
+                button.classList.add('is-hidden');
+            });
+        } else {
+            floatingBackButtons.forEach(function (button) {
+                button.classList.remove('is-hidden');
+            });
+        }
+
+        lastScrollY = currentScrollY;
+    }
+
+    floatingBackButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            if (window.scrollY > 40) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+            if (document.referrer && document.referrer.indexOf(window.location.origin) === 0) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
+        });
+    });
+
+    handleFloatingBackButtonState();
+    window.addEventListener('scroll', handleFloatingBackButtonState, { passive: true });
+</script>
+
+</body>
+</html>
+```

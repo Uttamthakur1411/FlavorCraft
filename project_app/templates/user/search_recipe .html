@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% include 'common/common_css.html' %}
+
+    <title>Search Product</title>
+
+
+
+<style>
+
+    .search-box{
+        width:35%;
+        margin:30px auto;
+        padding:20px;
+        border-radius:10px;
+        box-shadow:0px 0px 10px lightgray;
+        background:white;
+    }
+
+    .flex-container{
+        display:flex;
+        flex-wrap:wrap;
+        gap:30px;
+        justify-content:center;
+        margin:4%;
+    }
+
+    .video-card{
+        width:380px;
+        border-radius:10px;
+        overflow:hidden;
+        background:white;
+        box-shadow:0px 0px 10px gray;
+        transition:0.3s;
+    }
+
+    .video-card:hover{
+        transform:translateY(-5px);
+    }
+
+    .video-box video{
+        width:100%;
+        height:250px;
+        object-fit:cover;
+    }
+
+    .video-content{
+        padding:15px;
+    }
+
+    .dish-name{
+        color:#0d6efd;
+        font-size:22px;
+        font-weight:bold;
+        margin-bottom:10px;
+    }
+
+    .ingredients{
+        color:#198754;
+        font-weight:bold;
+        margin-bottom:8px;
+    }
+
+    .ingredients-text{
+        color:#555;
+        text-align:justify;
+        min-height:60px;
+    }
+
+    .description{
+        text-align:justify;
+        color:#444;
+        min-height:100px;
+    }
+
+    .whatsapp-btn{
+        width:100%;
+        margin-top:10px;
+    }
+
+</style>
+
+<div class="main-div">
+
+    <!-- Search Section -->
+
+    <div class="search-box">
+
+        <form method="post" action> <!--write your own endpoint in action -->
+            {% csrf_token %}
+
+
+                
+
+                 <select name="rc" class="form-select">
+
+                    <option>Select Category</option>
+                    <option>Pickle</option>
+                    <option>Papad</option>
+
+                 </select>
+
+              
+
+                <div class="text-center mt-5">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+                        Search
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+  
+
+    {% if r_key %}<!--write your own key  from view-->
+
+    <div class="flex-container">
+
+        {% for recipe in r_key %}
+
+        <div class="video-card">
+
+            <div class="video-box">
+
+                <video controls>
+                    <source src="/media/{{ recipe.recipe_video }}" type="video/mp4">
+                    Your browser does not support video.
+                </video>
+
+            </div>
+
+            <div class="video-content">
+
+                <div class="dish-name">
+                    {{ recipe.recipe_name }}<!--write your own column names -->
+                </div>
+
+                <div class="ingredients">
+                    Ingredients
+                </div>
+
+                <p class="ingredients-text">
+                    {{ recipe.ingredients }}
+                </p>
+
+                <hr>
+
+                <h6>Description</h6>
+
+                <p class="description">
+                    {{ recipe.description }}
+                </p>
+
+                <a href="https://wa.me/91{{ recipe.phone }}"
+                   target="_blank"
+                   class="btn btn-success whatsapp-btn">
+
+                    Chat on WhatsApp
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <h3 class="text-center text-danger mt-5">
+        No Recipe Videos Found
+    </h3>
+
+    {% endif %}
+
+</div>
+
+{% include 'common/footer.html' %}

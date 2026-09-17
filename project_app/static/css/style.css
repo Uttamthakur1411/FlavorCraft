@@ -1,0 +1,15 @@
+.main-div
+{
+
+    background-image: url(images\background.jpeg);
+min-height: 90vh;
+
+}
+
+*{
+box-sizing: border-box;
+
+}
+body{
+    background-image: url(images\background.jpeg);
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Reviews</title>
+    {% include 'common/common_css.html' %}
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(-45deg, #f6e3c5, #eebf8f, #d97b3f, #b5433a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .review-section {
+            width: 90%;
+            margin: auto;
+            padding: 50px 0 70px 0;
+        }
+
+        .review-heading {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        .review-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .review-card {
+            width: 340px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            border-top: 4px solid #f5a623;
+            transition: transform 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .profile-pic {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #f5a623;
+        }
+
+        .user-details h4 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: #7a3f3f;
+        }
+
+        .rating {
+            font-size: 1.1rem;
+            margin-top: 5px;
+            color: #f5a623;
+        }
+
+        .review-text {
+            margin-top: 15px;
+            line-height: 1.7;
+            color: #555;
+            text-align: justify;
+            min-height: 60px;
+        }
+
+        .review-date {
+            display: block;
+            margin-top: 15px;
+            color: #999;
+            font-size: 13px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .no-reviews {
+            text-align: center;
+            color: #fff;
+            background: rgba(0,0,0,0.3);
+            padding: 15px 30px;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .review-card {
+                width: 100%;
+            }
+            .profile-pic {
+                width: 65px;
+                height: 65px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- header code -->
+
+<!-- make all the design in this div -->
+<div class="main-div">
+<section class="review-section">
+
+    <h2 class="review-heading">Customer Reviews</h2>
+
+    <div class="review-container">
+
+        {% for item in review_data %}
+
+        <div class="review-card">
+
+            <div class="user-info">
+
+                {% if item.user and item.user.profile_pic %}
+                    <img src="{{ item.user.profile_pic.url }}" class="profile-pic" alt="{{ item.name }}">
+                {% else %}
+                    <img src="{% static 'images/avatar-design.png' %}" class="profile-pic" alt="User">
+                {% endif %}
+
+                <div class="user-details">
+                    <h4>{{ item.name }}</h4>
+                    <div class="rating">{{ item.rating }}</div>
+                </div>
+
+            </div>
+
+            <p class="review-text">{{ item.review }}</p>
+
+            <small class="review-date">{{ item.date }}</small>
+
+        </div>
+
+        {% empty %}
+
+        <h3 class="no-reviews">No Reviews Available</h3>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+</div>
+
+<!-- footer code -->
+{% include 'common/footer.html' %}
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Log in" %} | FlavorCraft Admin{% endblock %}
+{% block bodyclass %}{{ block.super }} login-page{% endblock %}
+
+{% block content %}
+<div class="fc-login-page">
+    <div class="fc-login-decoration fc-login-decoration-one"></div>
+    <div class="fc-login-decoration fc-login-decoration-two"></div>
+
+    <section class="fc-login-card" aria-labelledby="login-title">
+        <div class="fc-login-brand">
+            <span class="fc-brand-mark"><i class="fa-solid fa-leaf" aria-hidden="true"></i></span>
+            <span>FlavorCraft <em>Admin</em></span>
+        </div>
+        <p class="fc-eyebrow">SECURE CONTROL CENTER</p>
+        <h1 id="login-title">Welcome back</h1>
+        <p class="fc-login-subtitle">Sign in to manage your food community and marketplace.</p>
+
+        {% if form.errors and not form.non_field_errors %}
+        <div class="fc-login-error">Please enter a valid username and password.</div>
+        {% endif %}
+        {% if form.non_field_errors %}
+        <div class="fc-login-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <div class="fc-login-error">Your account does not have permission to access this admin panel.</div>
+        {% endif %}
+
+        <form method="post" action="{{ app_path }}" class="fc-login-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="fc-field">
+                <label for="id_username">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}<div class="fc-field-error">{{ form.username.errors|striptags }}</div>{% endif %}
+            </div>
+            <div class="fc-field">
+                <label for="id_password">Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}<div class="fc-field-error">{{ form.password.errors|striptags }}</div>{% endif %}
+            </div>
+            <button type="submit"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i> Sign in</button>
+        </form>
+        <p class="fc-login-footer"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Protected admin access</p>
+    </section>
+</div>
+{% endblock %}

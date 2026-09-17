@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | FlavorCraft Admin{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/flavorcraft_admin.css' %}?v=20260918">
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const backButton = document.getElementById('fc-back-button');
+        if (!backButton) return;
+
+        backButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            if (document.referrer && document.referrer.indexOf(window.location.origin) === 0) {
+                window.history.back();
+            } else {
+                window.location.href = '{% url "flavorcraft:index" %}';
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block branding %}
+<div class="fc-branding-wrap">
+    <h1 id="site-name"><a href="{% url 'flavorcraft:index' %}"><span class="fc-brand-mark"><i class="fa-solid fa-leaf"></i></span>FlavorCraft <em>Admin</em></a></h1>
+    <div class="fc-header-actions">
+        <a href="#" id="fc-back-button" class="fc-back-button" aria-label="Back to previous page">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

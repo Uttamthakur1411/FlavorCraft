@@ -1,0 +1,93 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ app_label|capfirst }} | FlavorCraft Admin{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    <span class="fc-breadcrumb-separator">/</span>
+    {{ app_label|capfirst }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="fc-app-page">
+    <header class="fc-app-hero">
+        <div class="fc-app-hero-copy">
+            <span class="fc-app-kicker"><i class="fa-solid fa-layer-group"></i> Workspace</span>
+            <h1>{{ app_label|capfirst }} management</h1>
+            <p>Manage every part of your food community from one focused workspace.</p>
+        </div>
+        <div class="fc-app-hero-mark" aria-hidden="true">
+            <i class="fa-solid fa-sliders"></i>
+        </div>
+        <div class="fc-app-hero-status">
+            <span class="fc-status-dot"></span>
+            <strong>Workspace ready</strong>
+            <small>All admin tools in one place</small>
+        </div>
+    </header>
+
+    <div class="fc-model-grid">
+        {% for app in app_list %}
+        {% for model in app.models %}
+        <article class="fc-model-card" style="--card-accent: {% cycle '#2d9d78' '#ee8b3a' '#6c63d9' '#238da3' '#d79d1d' '#e25d5d' '#3d8bfd' %}; --card-delay: {{ forloop.counter0 }}0ms;">
+            <div class="fc-model-card-top">
+                <span class="fc-model-icon">
+                    {% if model.object_name == 'Contact' %}<i class="fa-solid fa-message"></i>
+                    {% elif model.object_name == 'CreatorDetail' %}<i class="fa-solid fa-chef-hat"></i>
+                    {% elif model.object_name == 'CreatorReview' %}<i class="fa-solid fa-comment-dots"></i>
+                    {% elif model.object_name == 'Enquiry' %}<i class="fa-solid fa-inbox"></i>
+                    {% elif model.object_name == 'Feedback' %}<i class="fa-solid fa-star"></i>
+                    {% elif model.object_name == 'GiftBox' %}<i class="fa-solid fa-gift"></i>
+                    {% elif model.object_name == 'HomepagePick' %}<i class="fa-solid fa-house"></i>
+                    {% elif model.object_name == 'OrderRequest' %}<i class="fa-solid fa-receipt"></i>
+                    {% elif model.object_name == 'Product' %}<i class="fa-solid fa-bag-shopping"></i>
+                    {% elif model.object_name == 'RecipeVideo' %}<i class="fa-solid fa-bowl-food"></i>
+                    {% elif model.object_name == 'ShoppingListItem' %}<i class="fa-solid fa-list-check"></i>
+                    {% elif model.object_name == 'UserDetail' %}<i class="fa-solid fa-users"></i>
+                    {% else %}<i class="fa-solid fa-table-list"></i>{% endif %}
+                </span>
+                <span class="fc-model-index">{{ forloop.counter|stringformat:"02d" }}</span>
+            </div>
+
+            <div class="fc-model-copy">
+                <h2>{{ model.name }}</h2>
+                <p>
+                    {% if model.object_name == 'Contact' %}Review customer enquiries and messages.
+                    {% elif model.object_name == 'CreatorDetail' %}Approve, verify and manage creators.
+                    {% elif model.object_name == 'CreatorReview' %}Track ratings shared for every creator.
+                    {% elif model.object_name == 'Enquiry' %}Follow up on creator and customer conversations.
+                    {% elif model.object_name == 'Feedback' %}Monitor ratings and community reviews.
+                    {% elif model.object_name == 'GiftBox' %}Build curated bundles from your products.
+                    {% elif model.object_name == 'HomepagePick' %}Curate the homepage feature collection.
+                    {% elif model.object_name == 'OrderRequest' %}Review payments, delivery and order status.
+                    {% elif model.object_name == 'Product' %}Manage marketplace products and listings.
+                    {% elif model.object_name == 'RecipeVideo' %}Publish recipes and cooking videos.
+                    {% elif model.object_name == 'ShoppingListItem' %}Review saved ingredients and shopping lists.
+                    {% elif model.object_name == 'UserDetail' %}Manage community member accounts.
+                    {% else %}Manage records and settings for this section.{% endif %}
+                </p>
+            </div>
+
+            <div class="fc-model-actions">
+                {% if model.perms.add %}
+                <a class="fc-model-add" href="{{ model.add_url }}"><i class="fa-solid fa-plus"></i> Add new</a>
+                {% endif %}
+                <a class="fc-model-view" href="{{ model.admin_url }}" aria-label="View {{ model.name }}">
+                    <span>Open workspace</span><i class="fa-solid fa-arrow-up-right"></i>
+                </a>
+            </div>
+        </article>
+        {% empty %}
+        <div class="fc-app-empty">
+            <i class="fa-solid fa-folder-open"></i>
+            <h2>No sections available</h2>
+            <p>Your account does not have access to any sections in this workspace.</p>
+        </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

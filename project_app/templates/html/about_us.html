@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - FlavorCraft</title>
+    {% include 'common/common_css.html' %}
+
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate On Scroll (AOS) Library -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #e65c00 0%, #f9d423 100%);
+            --secondary-gradient: linear-gradient(135deg, #2b2d42 0%, #1a1a2e 100%);
+            --accent-color: #b5433a;
+            --bg-light: #f8f9fa;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.07);
+            --hover-shadow: 0 22px 45px rgba(230, 92, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Top Announcement Bar */
+        .top-announcement {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Hero Header Section */
+        .about-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
+                        url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            padding: 100px 20px 80px;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .about-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 15px;
+        }
+
+        .about-hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #e0e0e0;
+        }
+
+        .about-section {
+            padding: 80px 20px;
+            background: #ffffff;
+        }
+
+        .about-container {
+            max-width: 1140px;
+            margin: 0 auto;
+        }
+
+        /* Premium Content Cards */
+        .about-block {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 45px;
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 6px 0 0 6px;
+        }
+
+        .about-block.alt {
+            background: linear-gradient(135deg, #fff9f5 0%, #ffffff 100%);
+        }
+
+        .about-block h2 {
+            color: #1a1a2e;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-block p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin: 0;
+        }
+
+        /* Objectives Grid */
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .objective-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px 25px;
+            text-align: center;
+            border: 1px solid #f1f2f6;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            transition: all 0.35s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+            border-color: rgba(230, 92, 0, 0.3);
+        }
+
+        .objective-card .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            line-height: 70px;
+            background: linear-gradient(135deg, rgba(230, 92, 0, 0.1) 0%, rgba(249, 212, 35, 0.15) 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            transition: transform 0.3s ease;
+        }
+
+        .objective-card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .objective-card h3 {
+            color: var(--text-dark);
+            margin: 10px 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .objective-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* Team Section */
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .team-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px 25px;
+            width: 260px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #f1f2f6;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .team-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .team-img-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px;
+        }
+
+        .team-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffffff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover .team-img {
+            transform: scale(1.05);
+        }
+
+        .team-img-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            z-index: -1;
+        }
+
+        .team-card h3 {
+            margin: 10px 0 5px;
+            color: var(--text-dark);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .team-card .role {
+            background: linear-gradient(135deg, #e65c00 0%, #f9d423 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            line-height: 36px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 { font-size: 2.2rem; }
+            .about-block { padding: 25px; }
+            .team-card { width: 100%; max-width: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-announcement text-center">
+        <span><i class="fa-solid fa-heart me-2"></i> Crafting Flavor, Creating Memories</span>
+    </div>
+
+    <!-- Header Include -->
+    {% include 'common/header.html' %}
+
+    <div class="main">
+        
+        <!-- Hero Section -->
+        <section class="about-hero text-center" data-aos="fade-down">
+            <div class="container">
+                <h1>Who We Are</h1>
+                <p>Connecting authentic home chefs with passionate food lovers across the nation.</p>
+            </div>
+        </section>
+
+        <!-- Main Content Section -->
+        <section class="about-section">
+            <div class="about-container">
+
+                <!-- Our Story Block -->
+                <div class="about-block" data-aos="fade-up" data-aos-duration="1000">
+                    <h2>Our Story</h2>
+                    <p>
+                        <strong>FlavorCraft</strong> is an innovative online marketplace built for food enthusiasts and aspiring culinary entrepreneurs. We empower home chefs and local creators to share their traditional recipes through high-quality video tutorials, market authentic homemade delicacies—such as hand-crafted pickles, artisanal snacks, and sweets—and build direct relationships with customers who appreciate authentic food.
+                    </p>
+                </div>
+
+                <!-- Problem We Solve Block -->
+                <div class="about-block alt" data-aos="fade-up" data-aos-duration="1000">
+                    <h2>The Problem We Solve</h2>
+                    <p>
+                        Millions of exceptionally talented home cooks lack a dedicated digital platform to market their skills and scale their business. FlavorCraft seamlessly bridges the gap between passionate creators and discerning customers who crave hygienic, authentic, and nostalgic homemade food delivered straight to their doorstep.
+                    </p>
+                </div>
+
+                <!-- What We Stand For Block -->
+                <div class="about-block" data-aos="fade-up" data-aos-duration="1000">
+                    <h2>What We Stand For</h2>
+                    <div class="objectives-grid">
+                        
+                        <div class="objective-card" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="icon-wrapper">🍲</div>
+                            <h3>Empower Creators</h3>
+                            <p>Helping home cooks launch, market, and expand their culinary business.</p>
+                        </div>
+
+                        <div class="objective-card" data-aos="zoom-in" data-aos-delay="200">
+                            <div class="icon-wrapper">🛒</div>
+                            <h3>Curated Quality</h3>
+                            <p>100% genuine, seasonal, and hygienically prepared homemade treats.</p>
+                        </div>
+
+                        <div class="objective-card" data-aos="zoom-in" data-aos-delay="300">
+                            <div class="icon-wrapper">🎥</div>
+                            <h3>Recipe Community</h3>
+                            <p>Interactive video tutorials to share regional culinary heritage.</p>
+                        </div>
+
+                        <div class="objective-card" data-aos="zoom-in" data-aos-delay="400">
+                            <div class="icon-wrapper">💬</div>
+                            <h3>Direct Connection</h3>
+                            <p>Seamless WhatsApp ordering for direct buyer-seller interaction.</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Team Section -->
+                <div class="about-block alt" data-aos="fade-up" data-aos-duration="1000">
+                    <h2 class="text-center d-block">Meet Our Visionaries</h2>
+                    <div class="team-container">
+
+                        <div class="team-card" data-aos="flip-left" data-aos-delay="100">
+                            <div class="team-img-wrapper">
+                                <img src="{% static 'images/divya mishra.jpeg' %}" alt="Divya Mishra" class="team-img">
+                            </div>
+                            <h3>Divya Mishra</h3>
+                            <div class="role">Co-Founder & Director</div>
+                            <div class="social-links">
+                                <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                                <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="team-card" data-aos="flip-left" data-aos-delay="200">
+                            <div class="team-img-wrapper">
+                                <img src="{% static 'images/tanya.jpeg' %}" alt="Tanya Singh" class="team-img">
+                            </div>
+                            <h3>Tanya Singh</h3>
+                            <div class="role">Co-Founder & Head of Operations</div>
+                            <div class="social-links">
+                                <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                                <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer Include -->
+    {% include 'common/footer.html' %}
+
+    <!-- AOS Animation Library JS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 120
+        });
+    </script>
+</body>
+</html>

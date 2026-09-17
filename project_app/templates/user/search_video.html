@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Catalog</title>
+    
+    {% include 'common/common_css.html' %}
+    
+    <!-- Modern Typography & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --brand-whatsapp: #16a34a;
+            --brand-whatsapp-hover: #15803d;
+            --bg-base: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --radius: 8px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: 0.875rem; /* Compact base font size */
+            padding-top: 72px;
+        }
+
+        /* Compact Header */
+        .top-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+        }
+
+        .brand-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+            letter-spacing: -0.3px;
+        }
+
+        /* Professional Horizontal Search Bar */
+        .search-section {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+        }
+
+        .search-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .form-select-sm-custom {
+            height: 38px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            background-color: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .form-select-sm-custom:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background-color: #ffffff;
+        }
+
+        .btn-sm-custom {
+            height: 38px;
+            padding: 0 18px;
+            background-color: var(--primary);
+            border: none;
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .btn-sm-custom:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Main Content Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 16px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .results-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* Grid Layout */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        /* Compact Video Card */
+        .recipe-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .recipe-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            background-color: #000000;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .recipe-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .text-block {
+            font-size: 0.8rem;
+            color: #334155;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .ingredients-chip {
+            background-color: #f1f5f9;
+            border-radius: 4px;
+            padding: 6px 8px;
+            margin-bottom: 10px;
+            border-left: 2.5px solid var(--primary);
+        }
+
+        /* Compact WhatsApp Button */
+        .btn-whatsapp-compact {
+            margin-top: auto;
+            background-color: var(--brand-whatsapp);
+            color: #ffffff;
+            font-size: 0.775rem;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-whatsapp-compact:hover {
+            background-color: var(--brand-whatsapp-hover);
+            color: #ffffff;
+        }
+
+        /* Empty State */
+        .empty-box {
+            background: #ffffff;
+            border: 1px dashed var(--border-color);
+            border-radius: var(--radius);
+            padding: 32px 16px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .empty-box i {
+            font-size: 2rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% include 'user/user_header.html' %}
+
+    <!-- Header Navigation -->
+    <header class="top-navbar text-center">
+        <h1 class="brand-title"><i class="bi bi-journal-bookmark text-primary"></i> Culinary Craft Catalog</h1>
+    </header>
+
+    {% include 'common/message.html' %}
+
+    <!-- Compact Search Filter Bar -->
+    <section class="search-section">
+        <div class="search-wrapper">
+            <form action="/search_video/" method="post">
+                {% csrf_token %}
+                <div class="search-box">
+                    <div class="flex-grow-1">
+                        <select class="form-select form-select-sm-custom" name="recipe_category" required>
+                            <option value="" selected disabled>Select Category</option>
+                            <option value="Pickles">Pickles</option>
+                            <option value="Mocktail AndMore">Mocktail And More</option>
+                            <option value="Traditional Treats">Traditional Treats</option>
+                            <option value="Chef's special burger">Chef's Special Burger</option>
+                            <option value="Snacks">Snacks</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-sm-custom">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Main Results Container -->
+    <main class="main-container">
+        {% if r_key %}
+            <div class="results-header">
+                <h2 class="results-title">Available Recipes</h2>
+                <span class="badge bg-light text-dark border">{{ r_key|length }} Found</span>
+            </div>
+            
+            <div class="recipe-grid">
+                {% for recipe in r_key %}
+                <article class="recipe-card">
+                    <div class="video-container">
+                        {% if recipe.recipe_video %}
+                            <video controls preload="metadata">
+                                <source src="{{ recipe.recipe_video.url }}" type="video/mp4">
+                                Browser doesn't support video.
+                            </video>
+                        {% else %}
+                            <div class="d-flex h-100 align-items-center justify-content-center text-white small">
+                                Video unavailable
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-content">
+                        <h3 class="recipe-name">{{ recipe.name }}</h3>
+
+                        <div class="ingredients-chip">
+                            <div class="section-label">Ingredients</div>
+                            <div class="text-block mb-0">{{ recipe.ingredients }}</div>
+                        </div>
+
+                        <div>
+                            <div class="section-label">Description</div>
+                            <p class="text-block">{{ recipe.description }}</p>
+                        </div>
+
+                        <a href="https://wa.me/91{{ recipe.phone }}" target="_blank" class="btn-whatsapp-compact">
+                            <i class="bi bi-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <div class="empty-box">
+                <i class="bi bi-inbox"></i>
+                <h6 class="fw-bold mb-1">No Recipe Videos Selected</h6>
+                <p class="text-muted small mb-0">Choose a category from the dropdown above to view results.</p>
+            </div>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'common/footer.html' %}
+
+</body>
+
+</html>
