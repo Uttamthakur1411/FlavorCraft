@@ -78,15 +78,38 @@ button {
     }
 
     .floating-back-button {
-        top: auto;
-        right: 14px;
-        bottom: 14px;
-        left: auto;
-        padding: 9px 12px;
+        top: 74px !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: 12px !important;
+        z-index: 10000 !important;
+        width: 40px !important;
+        height: 40px !important;
+        padding: 0 !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
     }
 
     .floating-back-button span {
         display: none;
+    }
+
+    .login-section,
+    .register-page,
+    .login-page {
+        min-height: auto !important;
+    }
+
+    .login-card,
+    .register-wrapper,
+    .login-wrapper {
+        height: auto !important;
+    }
+
+    .login-visual,
+    .register-visual {
+        height: auto !important;
+        min-height: 255px !important;
     }
 
     .modern-footer {
